@@ -11,7 +11,8 @@
         (moon/query-replace-region flat)
         (moon/query-replace-point flat)
         (query-replace buffer indexed)
-        (find-file flat)))
+        (find-file flat)
+        (+default/diagnostics buffer)))
 
 ;; Configure the display per completion category.
 ;; Use the grid display for files and a buffer

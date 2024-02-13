@@ -15,6 +15,11 @@
 (package! telega)
 (package! ef-themes)
 (package! rainbow-mode)
+(package! atomic-chrome)
+
+(package! org-download)
+(package! org-ros)
+(package! org-appear)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

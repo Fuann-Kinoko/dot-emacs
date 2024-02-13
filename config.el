@@ -18,12 +18,11 @@
 ;; - `doom-symbol-font' -- for symbols
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 
-(setq doom-font (font-spec :family "Intel One Mono" :size 28 :weight 'regular))
+(setq doom-font (font-spec :family "Intel One Mono" :size 33 :weight 'regular))
 ;; (setq doom-font (font-spec :family "Iosevka Nerd Font" :size 25))
 (defun my-cjk-font()
   (dolist (charset '(kana han cjk-misc symbol bopomofo))
     (set-fontset-font t charset (font-spec :family "Sarasa Gothic SC"))))
-;; 测试中文就是有一些问题
 
 (add-hook 'after-setting-font-hook #'my-cjk-font)
 ;; (setq doom-font (:size 25)
@@ -49,6 +48,9 @@
 (setq doom-gruvbox-material-background  "medium"  ; or hard (defaults to soft)
      doom-gruvbox-material-palette     "material") ; or original (defaults to material)
 (setq doom-theme 'doom-gruvbox-material)
+;; (setq doom-theme 'doom-tomorrow-day)
+;; (setq doom-theme 'doom-flatwhite)
+;; (setq doom-theme 'doom-earl-grey)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -56,7 +58,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(load! "~/.config/doom/configs/orgs.el")
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
@@ -96,18 +98,21 @@
 (setq delete-by-moving-to-trash t
       trash-directory "~/trash/")
 
+(setq global-hl-line-modes nil)
+
 (after! dap-mode
   (setq dap-python-debugger 'debugpy))
 
 (use-package! evil-nerd-commenter)                               ; enabled
 (use-package! rainbow-mode)                                      ; enabled
-(load! "~/.config/doom/configs/packages/blink-search.el")        ; disabled
+(load! "~/.config/doom/configs/packages/blink-search.el")        ; [disabled]
 (load! "~/.config/doom/configs/packages/dirvish.el")             ; enabled
 (load! "~/.config/doom/configs/packages/telega.el")              ; enabled
 (load! "~/.config/doom/configs/packages/netease-cloud-music.el") ; enabled
-(load! "~/.config/doom/configs/packages/holo-layer.el")          ; disabled
+(load! "~/.config/doom/configs/packages/holo-layer.el")          ; [disabled]
 (load! "~/.config/doom/configs/packages/hlint-refactor.el")      ; enabled
 (load! "~/.config/doom/configs/packages/vertico.el")             ; enabled
+(load! "~/.config/doom/configs/packages/atomic-chrome.el")       ; enabled
 
 ; define general keybindings
 (load! "~/.config/doom/configs/keybinding.el")

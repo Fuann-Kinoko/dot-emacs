@@ -38,6 +38,11 @@
                    (completing-read (format "Replace \"%s\" to: " word) ())
                    nil (beginning-of-line))))
 
+(defun revert-buffer-fine-no-confirm ()
+  "revert buffer fine without confirm"
+  (interactive)
+  (revert-buffer-with-fine-grain nil t))
+
 (general-evil-setup)
 (global-set-key [escape] 'keyboard-quit)
 (setq avy-timeout-seconds 0.2)
@@ -50,9 +55,9 @@
   "gh" '+lookup/documentation
   "gb"  'eval-defun
   "-"   'evilnc-comment-or-uncomment-lines
-  "s"   'avy-goto-char-2
-  (kbd "C-J")    '("jump to below"   . evilem-motion-next-line)
-  (kbd "C-K")    '("jump to above"   . evilem-motion-previous-line)
+  ;; "s"   'avy-goto-char-2
+  ;; (kbd "C-J")    '("jump to below"   . evilem-motion-next-line)
+  ;; (kbd "C-K")    '("jump to above"   . evilem-motion-previous-line)
   (kbd "C-B")    '("replace word"   . moon/query-replace-point)
   (kbd "C-L")    '("multi next"     . evil-multiedit-match-and-next)
   (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
@@ -74,17 +79,22 @@
   "-"   'evilnc-comment-or-uncomment-lines)
 
 (evil-define-key 'insert 'global
-  (kbd "C-SPC")  '("complete filename"     . comint-dynamic-complete-filename))
+  (kbd "C-SPC")  '("complete filename"     . comint-dynamic-complete-filename)
+  (kbd "C-S-V")  '("paste" . evil-paste-after))
 
-(general-nmap "RET" (general-simulate-key "cio"))
+;; (general-nmap "RET" (general-simulate-key "cio"))
 (general-nmap "f"   (general-simulate-key "gs SPC"))
+(general-nmap "s"   (general-simulate-key "gs SPC"))
 
 (map! :leader
       (:prefix ("l" . "lsp")
-       :desc "list symbols" "s"    #'consult-lsp-symbols
-       :desc "code action" "a"     #'lsp-execute-code-action
-       :desc "clicl code lens" "l" #'lsp-avy-lens
-       :desc "check refer" "r"     #'+lookup/references))
+       :desc "list symbols"        "s"   #'consult-lsp-symbols
+       :desc "code action"         "a"   #'lsp-execute-code-action
+       :desc "clicl code lens"     "l"   #'lsp-avy-lens
+       :desc "check refer"         "r"   #'+lookup/references
+       :desc "diagnostics"         "d"   #'+default/diagnostics
+      )
+)
 
 
 ;; window control keybindings
@@ -127,11 +137,16 @@
 (evil-define-key 'normal vterm-mode-map
   (kbd "M-m w")  '("new frame" . make-frame-command))
 
-(evil-define-key 'insert vterm-mode-map
-  (kbd "C-S-c")  '("paste" . vterm-yank))
+(evil-define-key 'normal org-mode-map
+  (kbd "C-J")    '("jump to below heading"   . org-next-visible-heading)
+  (kbd "C-K")    '("jump to above heading"   . org-previous-visible-heading))
 
-;; (define-key ido-file-dir-completion-map
-;;   (kbd "M-w")    '("copy file name" . ido-copy-current-file-name))
+(evil-define-key 'insert vterm-mode-map
+  (kbd "C-S-c")  '("copy" . vterm-yank)
+  (kbd "C-S-v")  '("paste" . vterm-xterm-paste))
+
+(define-key evil-command-line-map
+  (kbd "C-S-v")  '("paste" . evil-paste-after))
 
 ; Alt+m key bindings
 (bind-keys
@@ -142,4 +157,5 @@
  ("s" . doom/switch-to-scratch-buffer)
  ("i" . ibuffer)
  ("w" . make-frame-command)
- ("t" . todo-show))
+ ("t" . todo-show)
+ ("b" . revert-buffer-fine-no-confirm))
