@@ -43,17 +43,41 @@
                   (1+ recent-file-list-nr)))
           list)))
 
+(defun filter-ignore-recent-files (path)
+  "check if a path should be ignored and not appear in the recent file list"
+  (let ((expanded-path (expand-file-name path))
+        (expanded-prefix (expand-file-name "~/.cargo")))
+    (and
+      (not (string-prefix-p expanded-prefix expanded-path))
+      t)))
+
 (defun custom-dashboard-widget-recent-file ()
   (recentf-mode 1)
   (let ((recent-files-list
-         (seq-take recentf-list 5)))
+          (seq-take (seq-filter 'filter-ignore-recent-files recentf-list) 5)))
     (when (recent-file-inserter
            "Recent Files:"
            recent-files-list)
       t))
   (insert custom-dashboard-widget-blank-seperator))
 
-(setq fancy-splash-image "~/.config/doom/banner3.pbm")
+(defun dashboard-open-recent-file-by-arg (arg is_force)
+  "when in dashboard mode, enter the file selecting by arg (arg started by 1)"
+  (interactive)
+  (when
+    (or is_force (eq major-mode '+doom-dashboard-mode))
+    (let*
+      ((recent-files-list (seq-take (seq-filter 'filter-ignore-recent-files recentf-list) 5))
+       (selected-file (expand-file-name (nth (- arg 1) recent-files-list))))
+      (find-file selected-file))))
+
+;; thare are also hooks added in ~/.config/doom/configs/packages/auto-dark.el
+(setq fancy-splash-image
+ (if (auto-dark--is-dark-mode)
+   "~/.config/doom/banner3.pbm"
+   "~/.config/doom/banner3_inv.pbm"
+   ))
+
 (setq +doom-dashboard-functions `(custom-dashboard-widget-space-seperator
                                   doom-dashboard-widget-banner
                                   custom-dashboard-widget-dash-seperator

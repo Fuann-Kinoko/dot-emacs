@@ -3,9 +3,13 @@
   :init
   (dirvish-override-dired-mode)
   :config
+  (setq dired-listing-switches "-ahl -v --group-directories-first --almost-all")
+
   (setq dirvish-attributes '(collapse file-size file-time))
 
   (setq dirvish-default-layout '(1 0.11 0.55))
+
+  (setq dirvish-side-auto-close t)
 
   (dirvish-define-preview exa (file)
     "Use `exa' to generate directory preview."

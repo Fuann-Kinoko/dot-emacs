@@ -23,6 +23,7 @@
  '(rustic-ansi-faces
    ["#282c34" "#ff6c6b" "#98be65" "#ECBE7B" "#51afef" "#c678dd" "#46D9FF" "#bbc2cf"])
  '(vc-annotate-background "#282c34")
+ '(frame-title-format '("%b"))
  '(vc-annotate-color-map
    (list
     (cons 20 "#98be65")
@@ -50,3 +51,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'narrow-to-region 'disabled nil)

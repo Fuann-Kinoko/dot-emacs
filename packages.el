@@ -16,6 +16,7 @@
 (package! ef-themes)
 (package! rainbow-mode)
 (package! atomic-chrome)
+(package! auto-dark)
 
 (package! org-download)
 (package! org-ros)

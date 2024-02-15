@@ -94,6 +94,8 @@
 ;; they are implemented.
 
 (add-to-list 'auto-mode-alist '("\\.kbd\\'" . lisp-mode))
+;; (add-to-list 'load-path "~/.config/doom/configs/packages/")
+;; (add-to-list 'load-path "~/.config/doom/utils/")
 
 (setq delete-by-moving-to-trash t
       trash-directory "~/trash/")
@@ -113,6 +115,8 @@
 (load! "~/.config/doom/configs/packages/hlint-refactor.el")      ; enabled
 (load! "~/.config/doom/configs/packages/vertico.el")             ; enabled
 (load! "~/.config/doom/configs/packages/atomic-chrome.el")       ; enabled
+(load! "~/.config/doom/configs/packages/auto-dark.el")           ; enabled
+
 
 ; define general keybindings
 (load! "~/.config/doom/configs/keybinding.el")

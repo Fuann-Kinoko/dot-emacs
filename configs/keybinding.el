@@ -11,6 +11,8 @@
 (define-key y-or-n-p-map      "o" 'act)
 (define-key query-replace-map "o" 'act)
 
+; ================== custom functions ==================
+
 (defun my-yank-file-name ()
   "Copy and show the file name of the current buffer."
   (interactive)
@@ -43,10 +45,16 @@
   (interactive)
   (revert-buffer-with-fine-grain nil t))
 
+(defun repeat-last-complex-command ()
+  "basically repeat-complex-command but without confirm"
+  (interactive)
+  (repeat-complex-command 1))
+
+; ================== bindings ==================
+;
 (general-evil-setup)
 (global-set-key [escape] 'keyboard-quit)
 (setq avy-timeout-seconds 0.2)
-
 
 ;; normal keybindings:
 (evil-define-key 'normal 'global
@@ -64,6 +72,7 @@
   (kbd "M-L")    '("smart enlarge"  . er/expand-region)
   (kbd "M-H")    '("smart shrink"   . er/contract-region)
   (kbd "SPC fn") '("yank file name" . my-yank-file-name)
+  (kbd "SPC e")  '("dirvish side"   . dirvish-side)
   (kbd "<f8>")   '("next error"     . next-error))
 
 (map! :leader
@@ -115,14 +124,16 @@
   "i"         `dirvish-file-info-menu
   "y"         `dirvish-yank-menu
   "f"         `dirvish-narrow
-  "s"         `dirvish-quicksort
+  ","         `dirvish-quicksort
+  (kbd "s")   `dirvish-fd
   (kbd "TAB") `other-window
   (kbd "M-l") `dirvish-ls-switches-menu
   (kbd "M-m") `dirvish-mark-menu
   (kbd "M-t") `dirvish-layout-toggle
   (kbd "M-s") `dirvish-setup-menu
   (kbd "M-e") `dirvish-emerge-menu
-  (kbd "M-j") `dirvish-fd-jump)
+  (kbd "M-j") `dirvish-fd-jump
+  (kbd "TAB") `dirvish-toggle-subtree)
 
 ; haskell repl(interactive) mode
 (evil-define-key 'insert haskell-interactive-mode-map
@@ -158,4 +169,17 @@
  ("i" . ibuffer)
  ("w" . make-frame-command)
  ("t" . todo-show)
- ("b" . revert-buffer-fine-no-confirm))
+ ("r" . revert-buffer-fine-no-confirm))
+
+
+(dotimes (i 5)
+  (let ((arg (1+ i)))
+    (defalias (intern (format "dashboard-open-recent-file-by-arg-%d" arg))
+      (lambda () (interactive) (dashboard-open-recent-file-by-arg arg nil))
+      (format "open recent file #%d" arg))))
+(evil-define-key `normal +doom-dashboard-mode-map
+  (kbd "1") 'dashboard-open-recent-file-by-arg-1
+  (kbd "2") 'dashboard-open-recent-file-by-arg-2
+  (kbd "3") 'dashboard-open-recent-file-by-arg-3
+  (kbd "4") 'dashboard-open-recent-file-by-arg-4
+  (kbd "5") 'dashboard-open-recent-file-by-arg-5)

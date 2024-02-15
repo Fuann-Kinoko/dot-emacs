@@ -11,12 +11,10 @@
         (moon/query-replace-region flat)
         (moon/query-replace-point flat)
         (query-replace buffer indexed)
-        (find-file flat)
-        (+default/diagnostics buffer)))
+        (find-file flat)))
 
 ;; Configure the display per completion category.
 ;; Use the grid display for files and a buffer
 ;; for the consult-grep commands.
 (setq vertico-multiform-categories
-      '((file grid)
-        (consult-grep buffer)))
+      '((file grid)))
