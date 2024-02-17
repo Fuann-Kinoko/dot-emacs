@@ -1,2 +1,3 @@
-(require 'atomic-chrome)
-(atomic-chrome-start-server)
+(use-package! atomic-chrome
+  :config
+  (atomic-chrome-start-server))

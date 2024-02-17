@@ -6,6 +6,7 @@
 ;; use 'M-x doom/reload'.
 
 (package! evil-snipe :disable t)
+(package! posframe)
 
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
@@ -28,12 +29,15 @@
 ;; (package! another-package
 ;;   :recipe (:host github :repo "username/repo"))
 
-(package! netease-cloud-music.el
-  :recipe (:host github :repo "SpringHan/netease-cloud-music.el"))
-(package! holo-layer
-  :recipe (:host github :repo "manateelazycat/holo-layer"))
-(package! blink-search
-  :recipe (:host github :repo "manateelazycat/blink-search" :files ("~/.emacs.d/.local/straight/repos/blink-search/backend/*.el")))
+;; (package! interaction-log
+;;   :recipe (:host github :repo "michael-heerdegen/interaction-log.el" :files ("~/.emacs.d/.local/straight/repos/interaction-log.el/*.el")))
+
+;; (package! netease-cloud-music.el
+;;   :recipe (:host github :repo "SpringHan/netease-cloud-music.el"))
+;; (package! holo-layer
+;;   :recipe (:host github :repo "manateelazycat/holo-layer"))
+;; (package! blink-search
+;;   :recipe (:host github :repo "manateelazycat/blink-search" :files ("~/.emacs.d/.local/straight/repos/blink-search/backend/*.el")))
 
 ;; If the package you are trying to install does not contain a PACKAGENAME.el
 ;; file, or is located in a subdirectory of the repo, you'll need to specify

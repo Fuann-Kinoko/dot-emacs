@@ -59,7 +59,7 @@
 ;; normal keybindings:
 (evil-define-key 'normal 'global
   "J"   'back-to-indentation
-  "K"   'evil-end-of-line
+  "K"   'evil-last-non-blank
   "gh" '+lookup/documentation
   "gb"  'eval-defun
   "-"   'evilnc-comment-or-uncomment-lines
@@ -70,6 +70,7 @@
   (kbd "C-L")    '("multi next"     . evil-multiedit-match-and-next)
   (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
   (kbd "M-L")    '("smart enlarge"  . er/expand-region)
+  (kbd "M-b")    '("buffers"  . +vertico/switch-workspace-buffer)
   (kbd "M-H")    '("smart shrink"   . er/contract-region)
   (kbd "SPC fn") '("yank file name" . my-yank-file-name)
   (kbd "SPC e")  '("dirvish side"   . dirvish-side)
@@ -84,7 +85,7 @@
   (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
   (kbd "C-B")    '("replace region" . moon/query-replace-region)
   "J"   'back-to-indentation
-  "K"   'evil-end-of-line
+  "K"   'evil-last-non-blank
   "-"   'evilnc-comment-or-uncomment-lines)
 
 (evil-define-key 'insert 'global
@@ -102,9 +103,11 @@
        :desc "clicl code lens"     "l"   #'lsp-avy-lens
        :desc "check refer"         "r"   #'+lookup/references
        :desc "diagnostics"         "d"   #'+default/diagnostics
-      )
-)
+       :desc "format"              "f"   #'lsp-format-buffer))
 
+(map! :leader
+      (:prefix ("b" . "buffer")
+       :desc "revert"              "r"   #'revert-buffer-fine-no-confirm))
 
 ;; window control keybindings
 (map! :map evil-window-map

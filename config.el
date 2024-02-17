@@ -18,13 +18,17 @@
 ;; - `doom-symbol-font' -- for symbols
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 
-(setq doom-font (font-spec :family "Intel One Mono" :size 33 :weight 'regular))
-;; (setq doom-font (font-spec :family "Iosevka Nerd Font" :size 25))
+
+;; (setq doom-font (font-spec :family "Intel One Mono" :size 33 :weight 'regular))
+(setq doom-font (font-spec :family "Iosevka Nerd Font Mono" :size 37 :weight 'regular :spacing 100))
+
 (defun my-cjk-font()
   (dolist (charset '(kana han cjk-misc symbol bopomofo))
     (set-fontset-font t charset (font-spec :family "Sarasa Gothic SC"))))
 
 (add-hook 'after-setting-font-hook #'my-cjk-font)
+
+
 ;; (setq doom-font (:size 25)
 ;;       doom-variable-pitch-font (:size 20)
 ;;       doom-big-font (:size 24))
@@ -44,13 +48,14 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 
-;; `gruvbox-material' contrast and palette options
+
 (setq doom-gruvbox-material-background  "medium"  ; or hard (defaults to soft)
      doom-gruvbox-material-palette     "material") ; or original (defaults to material)
 (setq doom-theme 'doom-gruvbox-material)
 ;; (setq doom-theme 'doom-tomorrow-day)
 ;; (setq doom-theme 'doom-flatwhite)
 ;; (setq doom-theme 'doom-earl-grey)
+
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -94,13 +99,9 @@
 ;; they are implemented.
 
 (add-to-list 'auto-mode-alist '("\\.kbd\\'" . lisp-mode))
-;; (add-to-list 'load-path "~/.config/doom/configs/packages/")
-;; (add-to-list 'load-path "~/.config/doom/utils/")
 
 (setq delete-by-moving-to-trash t
       trash-directory "~/trash/")
-
-(setq global-hl-line-modes nil)
 
 (after! dap-mode
   (setq dap-python-debugger 'debugpy))
@@ -123,3 +124,6 @@
 
 ; add custom utils
 (load! "~/.config/doom/utils/my-dash-board.el")
+
+; add ui settings
+(load! "~/.config/doom/configs/ui.el")

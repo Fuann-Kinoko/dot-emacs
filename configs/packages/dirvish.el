@@ -2,7 +2,10 @@
 (use-package! dirvish
   :init
   (dirvish-override-dired-mode)
+  (add-hook 'dired-mode-hook
+    'auto-revert-mode)
   :config
+  (setq dired-do-revert-buffer t) ;; refresh buffer automatically after do commands
   (setq dired-listing-switches "-ahl -v --group-directories-first --almost-all")
 
   (setq dirvish-attributes '(collapse file-size file-time))

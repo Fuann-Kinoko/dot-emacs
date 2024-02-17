@@ -6,12 +6,14 @@
     (when (eq major-mode '+doom-dashboard-mode)
         (+doom-dashboard/open (selected-frame)))))
 
-(after! doom-ui
-  ;; set your favorite themes
-  (setq! auto-dark-dark-theme 'doom-gruvbox-material
-        auto-dark-light-theme 'doom-flatwhite)
-  (auto-dark-mode 1)
-  (add-hook 'auto-dark-dark-mode-hook
-    (apply-partially #'auto-dark-banner-update "~/.config/doom/banner3.pbm"))
-  (add-hook 'auto-dark-light-mode-hook
-    (apply-partially #'auto-dark-banner-update "~/.config/doom/banner3_inv.pbm")))
+(use-package! auto-dark
+  :config
+  (after! doom-ui
+    ;; set your favorite themes
+    (setq! auto-dark-dark-theme 'doom-gruvbox-material
+          auto-dark-light-theme 'doom-flatwhite)
+    (auto-dark-mode 1)
+    (add-hook 'auto-dark-dark-mode-hook
+      (apply-partially #'auto-dark-banner-update "~/.config/doom/banner3.pbm"))
+    (add-hook 'auto-dark-light-mode-hook
+      (apply-partially #'auto-dark-banner-update "~/.config/doom/banner3_inv.pbm"))))
