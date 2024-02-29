@@ -99,6 +99,7 @@
 ;; they are implemented.
 
 (add-to-list 'auto-mode-alist '("\\.kbd\\'" . lisp-mode))
+(add-to-list 'auto-mode-alist '("\\.kdl\\'" . sdlang-mode))
 
 (setq delete-by-moving-to-trash t
       trash-directory "~/trash/")
@@ -117,6 +118,8 @@
 (load! "~/.config/doom/configs/packages/vertico.el")             ; enabled
 (load! "~/.config/doom/configs/packages/atomic-chrome.el")       ; enabled
 (load! "~/.config/doom/configs/packages/auto-dark.el")           ; enabled
+(load! "~/.config/doom/configs/packages/better-jumper.el")       ; enabled
+(load! "~/.config/doom/configs/packages/treesitter.el")          ; enabled
 
 
 ; define general keybindings

@@ -10,7 +10,7 @@
           (moon/query-replace-region flat)
           (moon/query-replace-point flat)
           (query-replace buffer indexed)
-          (find-file flat)))
+          (find-file flat))))
 
-  (setq vertico-multiform-categories
-        '((file grid))))
+  ;; (setq vertico-multiform-categories
+  ;;       '((file grid))))
