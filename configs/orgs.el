@@ -8,9 +8,10 @@
 (require 'org-download)
 (require 'org-ros)
 (add-hook 'dired-mode-hook 'org-download-enable)
-(setq org-image-actual-width 600)
+(setq org-image-actual-width 300)
 
 (setq org-startup-with-inline-images t)
+;; (setq-default line-spacing 2)
 
 (use-package deft
   :ensure t
@@ -85,3 +86,4 @@
 ;; ;; Use CDLaTeX to improve editing experiences
 (use-package! cdlatex
   :config (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
+

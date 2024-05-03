@@ -144,6 +144,18 @@
   (kbd "<up>")  `haskell-interactive-mode-history-previous
   (kbd "<down>")`haskell-interactive-mode-history-next)
 
+; idris repl(interactive) mode
+(evil-define-key 'insert idris-repl-mode-map
+  (kbd "C-l")   `idris-repl-clear-buffer
+  (kbd "<up>")  `idris-repl-backward-history
+  (kbd "<down>")`idris-repl-forward-history)
+
+(evil-define-key 'normal pdf-view-mode-map
+  (kbd "j")  (lambda() (interactive) (pdf-view-next-line-or-next-page 2))
+  (kbd "k")  (lambda() (interactive) (pdf-view-previous-line-or-previous-page 2))
+  (kbd "d")  (lambda() (interactive) (pdf-view-next-line-or-next-page 8))
+  (kbd "u")  (lambda() (interactive) (pdf-view-previous-line-or-previous-page 8)))
+
 (evil-define-key 'normal haskell-mode-map
   (kbd "gk")     '("check info" . haskell-process-do-info)
   (kbd "SPC lc") '("load the repl" . haskell-process-load-file))

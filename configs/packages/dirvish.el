@@ -14,6 +14,9 @@
 
   (setq dirvish-side-auto-close t)
 
+  (setq dirvish-preview-dispatchers
+      (cl-substitute 'pdf-preface 'pdf dirvish-preview-dispatchers))
+
   (dirvish-define-preview exa (file)
     "Use `exa' to generate directory preview."
     :require ("exa") ; tell Dirvish to check if we have the executable

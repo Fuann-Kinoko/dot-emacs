@@ -366,9 +366,30 @@ Defaults to \"material\""
    (isearch :foreground bg :background violet)
    (selection :foreground bg-alt :background dark-orange)
    (company-tooltip-common-selection :foreground bg-alt :background dark-blue)
+
+   (idris-equals-face :foreground "black")
+   (idris-colon-face :foreground "black")
+   (idris-hole-face :foreground orange)
+   (idris-operator-face :foreground blue)
+   (idris-semantic-function-face :foreground fg-alt)
+   (idris-semantic-implicit-face :slant 'italic)
+   (idris-semantic-data-face :foreground green)
+   (idris-semantic-type-face :foreground orange)
+   (idris-semantic-bound-face :foreground blue)
+   (idris-keyword-face :foreground red :weight 'semi-bold)
+   (idris-directive-face :foreground "dim gray")
+   (idris-directive-face :foreground "dim gray" :slant 'italic)
+   (idris-directive-face :foreground "dim gray")
+   (idris-inline-doc-face :foreground "dim gray")
+   (idris-identifier-face :foreground fg-alt)
+   (idris-info-title-face :height 1.8 :weight 'bold :foreground "cornflower blue" :family "PT Sans Narrow")
+   (idris-quasiquotation-face :background "light gray")
+   (idris-antiquotation-face :background "white" :box "light gray")
   )
   ;; --- extra variables ---------------------
   ()
-  )
+)
+
+
 
 ;;; doom-gruvbox-material-theme.el ends here

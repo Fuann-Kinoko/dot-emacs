@@ -34,9 +34,10 @@
 (unpin! org)
 
 
+(package! exec-path-from-shell)
 (package! evil-snipe :disable t)
 (package! posframe)
-
+(package! fcitx)
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;; (package! some-package)
@@ -47,6 +48,8 @@
 (package! rainbow-mode)
 (package! atomic-chrome)
 (package! auto-dark)
+;; (package! mini-popup)
+(package! vertico-posframe)
 
 (package! org-download)
 (package! org-ros)
@@ -54,6 +57,9 @@
 (package! sdlang-mode)
 (package! auctex)
 (package! cdlatex)
+
+(package! citre)
+(package! calibredb)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
@@ -70,6 +76,8 @@
 ;;   :recipe (:host github :repo "manateelazycat/holo-layer"))
 ;; (package! blink-search
 ;;   :recipe (:host github :repo "manateelazycat/blink-search" :files ("~/.emacs.d/.local/straight/repos/blink-search/backend/*.el")))
+;; (package! evil-fcitx
+;;   :recipe (:host github :repo "ngzh/evil-fcitx.el"))
 
 ;; If the package you are trying to install does not contain a PACKAGENAME.el
 ;; file, or is located in a subdirectory of the repo, you'll need to specify

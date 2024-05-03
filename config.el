@@ -21,10 +21,17 @@
 
 ;; (setq doom-font (font-spec :family "Intel One Mono" :size 33 :weight 'regular))
 (setq doom-font (font-spec :family "Iosevka Nerd Font Mono" :size 37 :weight 'regular :spacing 100))
+;; (setq doom-font (font-spec :family "Spleen 16x32" :size 41 :weight 'regular))
+;; (setq doom-font (font-spec :family "FTT-Chiaro B + FandolSong" :size 38 :weight 'regular))
 
+;; (setq my-cjk-font-name "Fusion Pixel 12px Proportional zh_hant")
+;; (setq my-cjk-font-name "FTT-Chiaro B + FandolSong")
+;; (setq my-cjk-font-name "Sarasa Gothic SC")
+
+;; 测试中文输入
 (defun my-cjk-font()
   (dolist (charset '(kana han cjk-misc symbol bopomofo))
-    (set-fontset-font t charset (font-spec :family "Sarasa Gothic SC"))))
+    (set-fontset-font t charset (font-spec :family  "Sarasa Term SC" :height 150))))
 
 (add-hook 'after-setting-font-hook #'my-cjk-font)
 
@@ -98,11 +105,22 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(load-file (let ((coding-system-for-read 'utf-8))
+                (shell-command-to-string "agda-mode locate")))
+;; auto-load agda-mode for .agda and .lagda.md
+(setq auto-mode-alist
+   (append
+     '(("\\.agda\\'" . agda2-mode)
+       ("\\.lagda.md\\'" . agda2-mode))
+     auto-mode-alist))
+
+
 (add-to-list 'auto-mode-alist '("\\.kbd\\'" . lisp-mode))
 (add-to-list 'auto-mode-alist '("\\.kdl\\'" . sdlang-mode))
 
 (setq delete-by-moving-to-trash t
       trash-directory "~/trash/")
+(pixel-scroll-precision-mode)
 
 (after! dap-mode
   (setq dap-python-debugger 'debugpy))
@@ -120,6 +138,11 @@
 (load! "~/.config/doom/configs/packages/auto-dark.el")           ; enabled
 (load! "~/.config/doom/configs/packages/better-jumper.el")       ; enabled
 (load! "~/.config/doom/configs/packages/treesitter.el")          ; enabled
+(load! "~/.config/doom/configs/packages/fcitx.el")               ; enabled
+(load! "~/.config/doom/configs/packages/calibredb.el")           ; enabled
+
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 
 ; define general keybindings
