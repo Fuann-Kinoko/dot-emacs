@@ -31,3 +31,5 @@
       '(("c" "~/.config" "Config")
         ("m" "~" "Home")
         ("d" "~/Downloads" "Download")))
+
+(provide 'my-dirvish)

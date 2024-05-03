@@ -17,3 +17,5 @@
       (apply-partially #'auto-dark-banner-update "~/.config/doom/banner3.pbm"))
     (add-hook 'auto-dark-light-mode-hook
       (apply-partially #'auto-dark-banner-update "~/.config/doom/banner3_inv.pbm"))))
+
+(provide 'my-auto-dark)

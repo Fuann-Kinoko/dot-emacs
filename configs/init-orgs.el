@@ -4,14 +4,16 @@
 (setq org-directory "~/org/")
 
 (setq org-link-search-must-match-exact-headline nil) ;; to enable linking words & bookmarks
+(setq +zen-text-scale 1)
 
 (require 'org-download)
 (require 'org-ros)
 (add-hook 'dired-mode-hook 'org-download-enable)
 (setq org-image-actual-width 300)
 
+(setq line-spacing 0.1)
 (setq org-startup-with-inline-images t)
-;; (setq-default line-spacing 2)
+
 
 (use-package deft
   :ensure t
@@ -87,3 +89,73 @@
 (use-package! cdlatex
   :config (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
 
+(after! org
+  (setq org-ellipsis "  ")
+  (set-ligatures! 'org-mode
+    :merge t
+    :checkbox      "[ ]"
+    :pending       "[-]"
+    :checkedbox    "[X]"
+    :list_property "::"
+    :em_dash       "---"
+    :arrow_right   "->"
+    :arrow_left    "<-"
+    :title         "#+title:"
+    :subtitle      "#+subtitle:"
+    :author        "#+author:"
+    :date          "#+date:"
+    :property      "#+property:"
+    :options       "#+options:"
+    :startup       "#+startup:"
+    :macro         "#+macro:"
+    :html_head     "#+html_head:"
+    :html          "#+html:"
+    :latex_class   "#+latex_class:"
+    :latex_header  "#+latex_header:"
+    :beamer_header "#+beamer_header:"
+    :latex         "#+latex:"
+    :attr_latex    "#+attr_latex:"
+    :attr_html     "#+attr_html:"
+    :attr_org      "#+attr_org:"
+    :begin_quote   "#+begin_quote"
+    :end_quote     "#+end_quote"
+    :caption       "#+caption:"
+    :header        "#+header:"
+    :begin_export  "#+begin_export"
+    :end_export    "#+end_export"
+    :results       "#+RESULTS:"
+    :property      ":PROPERTIES:"
+    :end           ":END:"
+    :priority_a    "[#A]"
+    :priority_b    "[#B]"
+    :priority_c    "[#C]"
+    :priority_d    "[#D]"
+    :priority_e    "[#E]"
+    :roam_tags     "#+roam_tags:"
+    :filetags      "#+filetags:")
+)
+
+(after! org
+    (setq org-src-fontify-natively t
+    org-fontify-whole-heading-line t
+    org-pretty-entities t
+    org-hide-emphasis-markers t
+    org-agenda-block-separator ""
+    org-fontify-done-headline t
+    org-fontify-quote-and-verse-blocks t
+    org-startup-with-inline-images t
+    org-startup-indented t))
+
+    (lambda () (progn
+      (setq left-margin-width 2)
+      (setq right-margin-width 2)
+      (set-window-buffer nil (current-buffer))))
+(setq header-line-format " ")
+(add-hook 'org-mode-hook
+          (lambda ()
+            (font-lock-add-keywords
+             nil
+             '(("^-\\{5,\\}"  0 '(:foreground "purple" :weight bold))))))
+
+
+(provide 'init-orgs)

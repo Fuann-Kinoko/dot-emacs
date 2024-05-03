@@ -46,9 +46,11 @@
 (defun filter-ignore-recent-files (path)
   "check if a path should be ignored and not appear in the recent file list"
   (let ((expanded-path (expand-file-name path))
-        (expanded-prefix (expand-file-name "~/.cargo")))
+        (expanded-prefix-cargo (expand-file-name "~/.cargo"))
+        (expanded-prefix-autosave (expand-file-name "~/.emacs.d/.local/etc/workspaces/autosave")))
     (and
-      (not (string-prefix-p expanded-prefix expanded-path))
+      (not (string-prefix-p expanded-prefix-cargo expanded-path))
+      (not (string-prefix-p expanded-prefix-autosave expanded-path))
       t)))
 
 (defun custom-dashboard-widget-recent-file ()
@@ -83,3 +85,8 @@
                                   custom-dashboard-widget-dash-seperator
                                   custom-dashboard-widget-recent-file
                                   doom-dashboard-widget-loaded))
+
+(setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
+(add-hook! '+doom-dashboard-mode-hook (hide-mode-line-mode 1) (hl-line-mode -1))
+
+(provide 'my-dash-board)

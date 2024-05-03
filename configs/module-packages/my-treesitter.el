@@ -15,3 +15,5 @@
      (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
      (rust "https://github.com/tree-sitter/tree-sitter-rust")
      (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+(provide 'my-treesitter)

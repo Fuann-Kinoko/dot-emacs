@@ -6,3 +6,5 @@
   (setq fcitx-use-dbus nil
       fcitx-remote-command "fcitx5-remote")
   (fcitx-aggressive-setup))
+
+(provide 'my-fcitx)

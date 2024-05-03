@@ -20,3 +20,5 @@
   (setq calibredb-db-dir (expand-file-name "metadata.db" calibredb-root-dir))
   (setq calibredb-library-alist '(("~/Documents/book")
                                   ("~/Documents/Landing-Page"))))
+
+(provide 'my-calibredb)

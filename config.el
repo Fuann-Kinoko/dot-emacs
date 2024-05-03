@@ -26,12 +26,13 @@
 
 ;; (setq my-cjk-font-name "Fusion Pixel 12px Proportional zh_hant")
 ;; (setq my-cjk-font-name "FTT-Chiaro B + FandolSong")
-;; (setq my-cjk-font-name "Sarasa Gothic SC")
+(setq my-cjk-font-name "Sarasa Gothic SC")
+;; (setq my-cjk-font-name "Sarasa Term SC")
 
 ;; 测试中文输入
 (defun my-cjk-font()
   (dolist (charset '(kana han cjk-misc symbol bopomofo))
-    (set-fontset-font t charset (font-spec :family  "Sarasa Term SC" :height 150))))
+    (set-fontset-font t charset (font-spec :family my-cjk-font-name :height 150))))
 
 (add-hook 'after-setting-font-hook #'my-cjk-font)
 
@@ -70,7 +71,6 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(load! "~/.config/doom/configs/orgs.el")
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
@@ -105,51 +105,32 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(load-file (let ((coding-system-for-read 'utf-8))
-                (shell-command-to-string "agda-mode locate")))
-;; auto-load agda-mode for .agda and .lagda.md
-(setq auto-mode-alist
-   (append
-     '(("\\.agda\\'" . agda2-mode)
-       ("\\.lagda.md\\'" . agda2-mode))
-     auto-mode-alist))
-
-
-(add-to-list 'auto-mode-alist '("\\.kbd\\'" . lisp-mode))
-(add-to-list 'auto-mode-alist '("\\.kdl\\'" . sdlang-mode))
-
 (setq delete-by-moving-to-trash t
       trash-directory "~/trash/")
-(pixel-scroll-precision-mode)
 
 (after! dap-mode
   (setq dap-python-debugger 'debugpy))
 
-(use-package! evil-nerd-commenter)                               ; enabled
-(use-package! rainbow-mode)                                      ; enabled
-(load! "~/.config/doom/configs/packages/blink-search.el")        ; [disabled]
-(load! "~/.config/doom/configs/packages/dirvish.el")             ; enabled
-(load! "~/.config/doom/configs/packages/telega.el")              ; enabled
-(load! "~/.config/doom/configs/packages/netease-cloud-music.el") ; enabled
-(load! "~/.config/doom/configs/packages/holo-layer.el")          ; [disabled]
-(load! "~/.config/doom/configs/packages/hlint-refactor.el")      ; enabled
-(load! "~/.config/doom/configs/packages/vertico.el")             ; enabled
-(load! "~/.config/doom/configs/packages/atomic-chrome.el")       ; enabled
-(load! "~/.config/doom/configs/packages/auto-dark.el")           ; enabled
-(load! "~/.config/doom/configs/packages/better-jumper.el")       ; enabled
-(load! "~/.config/doom/configs/packages/treesitter.el")          ; enabled
-(load! "~/.config/doom/configs/packages/fcitx.el")               ; enabled
-(load! "~/.config/doom/configs/packages/calibredb.el")           ; enabled
+(add-to-list 'load-path "~/.config/doom/configs/module-packages")
+(use-package! evil-nerd-commenter)
+(use-package! rainbow-mode)
+(require 'my-dirvish)
+(require 'my-vertico)
+(require 'my-auto-dark)
+(require 'my-treesitter)
+(require 'my-fcitx)
+(require 'my-calibredb)
 
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
+; misc configs
+(add-to-list 'load-path "~/.config/doom/configs")
+(require 'init-keybinding)
+(require 'init-modes)
+(require 'init-orgs)
+(require 'init-ui)
 
-; define general keybindings
-(load! "~/.config/doom/configs/keybinding.el")
-
-; add custom utils
-(load! "~/.config/doom/utils/my-dash-board.el")
-
-; add ui settings
-(load! "~/.config/doom/configs/ui.el")
+; misc utils
+(add-to-list 'load-path "~/.config/doom/utils")
+(require 'my-dash-board)

@@ -15,3 +15,17 @@
 (setq global-hl-line-modes nil)
 ;; disable background highlight for current line
 ;; so that i can use flatwhite theme correctly
+
+(modify-all-frames-parameters
+'((right-divider-width . 40)
+(internal-border-width . 40)))
+(dolist (face '(window-divider
+                window-divider-first-pixel
+                window-divider-last-pixel))
+(face-spec-reset-face face))
+;; add more blank in margin area, aesthentical setting
+
+(pixel-scroll-precision-mode)
+;; enhance scroll mode
+
+(provide 'init-ui)

@@ -198,3 +198,5 @@
   (kbd "3") 'dashboard-open-recent-file-by-arg-3
   (kbd "4") 'dashboard-open-recent-file-by-arg-4
   (kbd "5") 'dashboard-open-recent-file-by-arg-5)
+
+(provide 'init-keybinding)

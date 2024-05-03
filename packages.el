@@ -48,7 +48,6 @@
 (package! rainbow-mode)
 (package! atomic-chrome)
 (package! auto-dark)
-;; (package! mini-popup)
 (package! vertico-posframe)
 
 (package! org-download)
@@ -57,6 +56,10 @@
 (package! sdlang-mode)
 (package! auctex)
 (package! cdlatex)
+;; (package! org-modern)
+;; (package! org-modern-indent
+;;   :recipe (:host github :repo "jdtsmith/org-modern-indent"))
+;; (package! olivetti)
 
 (package! citre)
 (package! calibredb)
@@ -76,8 +79,8 @@
 ;;   :recipe (:host github :repo "manateelazycat/holo-layer"))
 ;; (package! blink-search
 ;;   :recipe (:host github :repo "manateelazycat/blink-search" :files ("~/.emacs.d/.local/straight/repos/blink-search/backend/*.el")))
-;; (package! evil-fcitx
-;;   :recipe (:host github :repo "ngzh/evil-fcitx.el"))
+(package! evil-fcitx
+  :recipe (:host github :repo "ngzh/evil-fcitx.el"))
 
 ;; If the package you are trying to install does not contain a PACKAGENAME.el
 ;; file, or is located in a subdirectory of the repo, you'll need to specify

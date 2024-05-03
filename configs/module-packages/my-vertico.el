@@ -28,3 +28,5 @@
 
   ;; (setq vertico-multiform-categories
   ;;       '((file grid))))
+
+(provide 'my-vertico)

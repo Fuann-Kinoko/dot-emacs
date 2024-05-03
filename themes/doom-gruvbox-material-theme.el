@@ -104,7 +104,7 @@ Defaults to \"material\""
         gm/blue         "#83a598"
         gm/dark-blue    "#68948a"       ;; dimBlue
         gm/magenta      "#d3869b"       ;; purple
-        gm/violet       "#ab6c7d"       ;; dimPurple
+        gm/violet       "#d3869b"       ;; dimPurple
         gm/cyan         "#8ec07c"       ;; aqua
         gm/dark-cyan    "#72966c"))     ;; dimAqua
  ((equal doom-gruvbox-material-palette "mix")
@@ -190,13 +190,13 @@ Defaults to \"material\""
    ;;                    (doom-blend yellow base8 0.5)))
    (comments       "#928374")
    (doc-comments   (doom-darken (if doom-gruvbox-material-brighter-comments green green) 0.15))
-   (constants      violet)
+   (constants      magenta)
    (functions      cyan)
    ;; (keywords       (doom-darken dark-green 0.25))
    (keywords       red)
    (methods        cyan)
    (operators      blue)
-   (type           orange)
+   (type           blue)
    (strings        green)
    (variables      cyan)
    (numbers        magenta)
