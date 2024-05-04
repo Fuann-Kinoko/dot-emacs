@@ -36,6 +36,7 @@
 
 (package! exec-path-from-shell)
 (package! evil-snipe :disable t)
+(package! evil-escape :disable t)
 (package! posframe)
 (package! fcitx)
 
@@ -48,18 +49,20 @@
 (package! rainbow-mode)
 (package! atomic-chrome)
 (package! auto-dark)
+(package! sdlang-mode)
 (package! vertico-posframe)
 
 (package! org-download)
 (package! org-ros)
 (package! org-appear)
-(package! sdlang-mode)
 (package! auctex)
 (package! cdlatex)
-;; (package! org-modern)
-;; (package! org-modern-indent
-;;   :recipe (:host github :repo "jdtsmith/org-modern-indent"))
-;; (package! olivetti)
+(package! org-modern)
+;; (package! org-margin
+;;   :recipe (:host github :repo "rougier/org-margin"))
+(package! org-modern-indent
+  :recipe (:host github :repo "jdtsmith/org-modern-indent"))
+(package! olivetti)
 
 (package! citre)
 (package! calibredb)

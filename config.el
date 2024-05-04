@@ -21,13 +21,14 @@
 
 ;; (setq doom-font (font-spec :family "Intel One Mono" :size 33 :weight 'regular))
 (setq doom-font (font-spec :family "Iosevka Nerd Font Mono" :size 37 :weight 'regular :spacing 100))
+(setq doom-variable-pitch-font (font-spec :family "Vollkorn"))
 ;; (setq doom-font (font-spec :family "Spleen 16x32" :size 41 :weight 'regular))
 ;; (setq doom-font (font-spec :family "FTT-Chiaro B + FandolSong" :size 38 :weight 'regular))
 
 ;; (setq my-cjk-font-name "Fusion Pixel 12px Proportional zh_hant")
 ;; (setq my-cjk-font-name "FTT-Chiaro B + FandolSong")
-(setq my-cjk-font-name "Sarasa Gothic SC")
-;; (setq my-cjk-font-name "Sarasa Term SC")
+;; (setq my-cjk-font-name "Sarasa Gothic SC")
+(setq my-cjk-font-name "Sarasa Term SC")
 
 ;; 测试中文输入
 (defun my-cjk-font()
@@ -108,9 +109,7 @@
 (setq delete-by-moving-to-trash t
       trash-directory "~/trash/")
 
-(after! dap-mode
-  (setq dap-python-debugger 'debugpy))
-
+; settings for each installed package
 (add-to-list 'load-path "~/.config/doom/configs/module-packages")
 (use-package! evil-nerd-commenter)
 (use-package! rainbow-mode)
@@ -121,15 +120,13 @@
 (require 'my-fcitx)
 (require 'my-calibredb)
 
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
-
 ; misc configs
 (add-to-list 'load-path "~/.config/doom/configs")
 (require 'init-keybinding)
 (require 'init-modes)
 (require 'init-orgs)
 (require 'init-ui)
+(require 'init-debug)
 
 ; misc utils
 (add-to-list 'load-path "~/.config/doom/utils")

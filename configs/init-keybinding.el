@@ -72,6 +72,7 @@
   (kbd "M-L")    '("smart enlarge"  . er/expand-region)
   (kbd "M-b")    '("buffers"  . +vertico/switch-workspace-buffer)
   (kbd "M-H")    '("smart shrink"   . er/contract-region)
+  (kbd "M-w")    '("alt workspace"  . +workspace/switch-to)
   (kbd "SPC fn") '("yank file name" . my-yank-file-name)
   (kbd "SPC e")  '("dirvish side"   . dirvish-side)
   (kbd "<f8>")   '("next error"     . next-error))

@@ -1,5 +1,6 @@
 ;;; configs/packages/dirvish.el -*- lexical-binding: t; -*-
 (use-package! dirvish
+  :defer t
   :init
   (dirvish-override-dired-mode)
   (add-hook 'dired-mode-hook

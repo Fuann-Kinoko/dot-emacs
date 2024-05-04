@@ -15,31 +15,31 @@
 (setq org-startup-with-inline-images t)
 
 
-(use-package deft
-  :ensure t
-  :defer t
-  :config
-  (progn
-    (setq deft-extensions '("md" "markdown" "org" "txt"))
-    (setq deft-directory "~/org/")
-    (setq deft-file-naming-rules '((noslash . "-")
-                                   (nospace . "-")
-                                   (case-fn . downcase)))
-    (setq deft-recursive t)
-    (evil-define-key 'insert deft-mode-map (kbd "C-<backspace>") #'deft-filter-decrement-word)
-    (evil-define-key 'insert deft-mode-map (kbd "C-w") #'deft-filter-decrement-word)
-    (evil-define-key 'insert deft-mode-map (kbd "C-k") #'deft-filter-clear)))
+;; (use-package deft
+;;   :defer t
+;;   :config
+;;   (progn
+;;     (setq deft-extensions '("md" "markdown" "org" "txt"))
+;;     (setq deft-directory "~/org/")
+;;     (setq deft-file-naming-rules '((noslash . "-")
+;;                                    (nospace . "-")
+;;                                    (case-fn . downcase)))
+;;     (setq deft-recursive t)
+;;     (evil-define-key 'insert deft-mode-map (kbd "C-<backspace>") #'deft-filter-decrement-word)
+;;     (evil-define-key 'insert deft-mode-map (kbd "C-w") #'deft-filter-decrement-word)
+;;     (evil-define-key 'insert deft-mode-map (kbd "C-k") #'deft-filter-clear)))
 
 (use-package! org-appear
-  :init
-  (setq org-hide-emphasis-markers t)
-  (setq org-appear-inside-latex t)
-  :config
-  (add-hook 'org-mode-hook 'org-appear-mode)
-  ;; (setq org-appear-autolinks t)
+  :defer t
+  :custom
+  (org-hide-emphasis-markers t)
+  (org-appear-inside-latex t)
+  :hook
+  (org-mode . org-appear-mode)
   )
 
 (use-package! org-roam
+  :defer t
   :ensure t
   :bind
   (:map org-mode-map
@@ -48,6 +48,7 @@
   (org-roam-db-autosync-enable))
 
 (use-package! org-latex-preview
+  :defer t
   :init
   (setq org-startup-with-latex-preview 't)
   (setq org-latex-preview-live nil)
@@ -87,10 +88,10 @@
 ;;
 ;; ;; Use CDLaTeX to improve editing experiences
 (use-package! cdlatex
+  :defer t
   :config (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
 
 (after! org
-  (setq org-ellipsis "  ")
   (set-ligatures! 'org-mode
     :merge t
     :checkbox      "[ ]"
@@ -138,24 +139,44 @@
 (after! org
     (setq org-src-fontify-natively t
     org-fontify-whole-heading-line t
-    org-pretty-entities t
-    org-hide-emphasis-markers t
     org-agenda-block-separator ""
     org-fontify-done-headline t
-    org-fontify-quote-and-verse-blocks t
-    org-startup-with-inline-images t
-    org-startup-indented t))
+    org-startup-indented t
+    org-startup-folded 'fold
+    org-fontify-quote-and-verse-blocks t))
 
-    (lambda () (progn
-      (setq left-margin-width 2)
-      (setq right-margin-width 2)
-      (set-window-buffer nil (current-buffer))))
-(setq header-line-format " ")
-(add-hook 'org-mode-hook
-          (lambda ()
-            (font-lock-add-keywords
-             nil
-             '(("^-\\{5,\\}"  0 '(:foreground "purple" :weight bold))))))
 
+(add-hook 'org-mode-hook #'org-modern-mode)
+(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+(use-package! org-modern
+  :custom
+  ;; (org-modern-block-name nil)
+  (org-auto-align-tags nil)
+  (org-tags-column 0)
+  (org-fold-catch-invisible-edits 'show-and-error)
+  (org-special-ctrl-a/e t)
+  (org-insert-heading-respect-content t)
+  (org-ellipsis "…")
+  (org-agenda-tags-column 0)
+  (org-agenda-time-grid '((daily today require-timed) (800 1000 1200 1400 1600 1800 2000) " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
+  (org-agenda-current-time-string "⭠ now ─────────────────────────────────────────────────")
+  (org-modern-star 'replace)
+
+  :config
+  (global-org-modern-mode)
+  (defun my-org-mode-no-line-number-hook () (setq display-line-numbers nil))
+  (add-hook 'org-mode-hook 'my-org-mode-no-line-number-hook))
+
+;; (use-package! org-margin
+;;   :config
+;;   )
+
+(use-package! org-modern-indent
+  :custom
+  (org-modern-indent-begin " ")
+  (org-modern-indent-guide " ")
+  (org-modern-indent-end " ")
+  :config
+  (add-hook 'org-mode-hook #'org-modern-indent-mode 100)) ;; 90 is the depth
 
 (provide 'init-orgs)

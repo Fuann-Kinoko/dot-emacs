@@ -18,7 +18,7 @@
 
 (modify-all-frames-parameters
 '((right-divider-width . 40)
-(internal-border-width . 40)))
+(internal-border-width . 45)))
 (dolist (face '(window-divider
                 window-divider-first-pixel
                 window-divider-last-pixel))
@@ -27,5 +27,18 @@
 
 (pixel-scroll-precision-mode)
 ;; enhance scroll mode
+
+(setq evil-shift-width 2)
+;; shift only 2 char pressing > or < in visual mode
+
+(custom-set-faces!
+  '(org-document-title :height 1.5 :weight extrabold))
+;; enlarge org mode title
+
+(setq scroll-preserve-screen-position t
+      scroll-margin 0
+      scroll-conservatively 97)
+(setq display-line-numbers-width-start t)
+;; let scroll slow down a little bit
 
 (provide 'init-ui)
