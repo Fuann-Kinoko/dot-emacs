@@ -39,6 +39,8 @@
 (package! evil-escape :disable t)
 (package! posframe)
 (package! fcitx)
+(package! better-jumper)
+(package! visual-regexp)
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;; (package! some-package)
@@ -51,17 +53,18 @@
 (package! auto-dark)
 (package! sdlang-mode)
 (package! vertico-posframe)
+(package! pangu-spacing)
 
 (package! org-download)
 (package! org-ros)
 (package! org-appear)
 (package! auctex)
 (package! cdlatex)
-(package! org-modern)
+;; (package! org-modern)
 ;; (package! org-margin
 ;;   :recipe (:host github :repo "rougier/org-margin"))
-(package! org-modern-indent
-  :recipe (:host github :repo "jdtsmith/org-modern-indent"))
+;; (package! org-modern-indent
+;;   :recipe (:host github :repo "jdtsmith/org-modern-indent"))
 (package! olivetti)
 
 (package! citre)

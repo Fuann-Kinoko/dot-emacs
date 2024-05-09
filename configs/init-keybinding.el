@@ -13,6 +13,12 @@
 
 ; ================== custom functions ==================
 
+(defun my-ace-sneak ()
+  "Simulate gs SPC for sneak-like cursor jump."
+  (interactive)
+  (let ((current-prefix-arg t))
+    (evil-avy-goto-char-timer)))
+
 (defun my-yank-file-name ()
   "Copy and show the file name of the current buffer."
   (interactive)
@@ -29,16 +35,22 @@
   (let ((sel (buffer-substring-no-properties
                   (region-beginning)
                   (region-end))))
-  (query-replace sel
-                   (completing-read (format "Replace \"%s\" to: " sel) ())
-                   nil (beginning-of-line))))
+        (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
+                (lambda () (setq vr--regexp-string sel))))  ;;
+        (call-interactively 'vr/query-replace))))           ;;
+  ;; (vr/query-replace sel
+  ;;                  (completing-read (format "Replace \"%s\" to: " sel) ())
+  ;;                  nil (beginning-of-line))))
 (defun moon/query-replace-point ()
   "Query replace thing at point."
   (interactive)
   (let ((word (thing-at-point 'word t)))
-    (query-replace word
-                   (completing-read (format "Replace \"%s\" to: " word) ())
-                   nil (beginning-of-line))))
+        (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
+                (lambda () (setq vr--regexp-string word)))) ;;
+        (call-interactively 'vr/query-replace))))           ;;
+    ;; (vr/query-replace word
+    ;;                (completing-read (format "Replace \"%s\" to: " word) ())
+    ;;                nil (beginning-of-line))))
 
 (defun revert-buffer-fine-no-confirm ()
   "revert buffer fine without confirm"
@@ -47,7 +59,7 @@
 
 (defun repeat-last-complex-command ()
   "basically repeat-complex-command but without confirm"
-  (interactive)
+  (lol)
   (repeat-complex-command 1))
 
 ; ================== bindings ==================
@@ -63,14 +75,17 @@
   "gh" '+lookup/documentation
   "gb"  'eval-defun
   "-"   'evilnc-comment-or-uncomment-lines
-  ;; "s"   'avy-goto-char-2
-  ;; (kbd "C-J")    '("jump to below"   . evilem-motion-next-line)
-  ;; (kbd "C-K")    '("jump to above"   . evilem-motion-previous-line)
+  (kbd "C-o")    '("jump to back"   . (lambda () (interactive) (better-jumper-jump-backward) (recenter-top-bottom)))
+  (kbd "C-i")    '("jump to fore"   . (lambda () (interactive) (better-jumper-jump-forward) (recenter-top-bottom)))
+  (kbd "C-s")    '("jump to below"  . save-buffer)
+  (kbd "s")      '("sneak"          . my-ace-sneak)
+  (kbd "C-j")    '("jump to below"  . sp-next-sexp)
+  (kbd "C-k")    '("jump to above"  . backward-up-list)
   (kbd "C-B")    '("replace word"   . moon/query-replace-point)
   (kbd "C-L")    '("multi next"     . evil-multiedit-match-and-next)
   (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
   (kbd "M-L")    '("smart enlarge"  . er/expand-region)
-  (kbd "M-b")    '("buffers"  . +vertico/switch-workspace-buffer)
+  (kbd "M-b")    '("buffers"        . +vertico/switch-workspace-buffer)
   (kbd "M-H")    '("smart shrink"   . er/contract-region)
   (kbd "M-w")    '("alt workspace"  . +workspace/switch-to)
   (kbd "SPC fn") '("yank file name" . my-yank-file-name)
@@ -94,8 +109,8 @@
   (kbd "C-S-V")  '("paste" . evil-paste-after))
 
 ;; (general-nmap "RET" (general-simulate-key "cio"))
-(general-nmap "f"   (general-simulate-key "gs SPC"))
-(general-nmap "s"   (general-simulate-key "gs SPC"))
+;; (general-nmap "f"   (general-simulate-key "gs SPC"))
+;; (general-nmap "s"   (general-simulate-key "gs SPC"))
 
 (map! :leader
       (:prefix ("l" . "lsp")
@@ -139,8 +154,8 @@
   (kbd "M-j") `dirvish-fd-jump
   (kbd "TAB") `dirvish-toggle-subtree)
 
-; haskell repl(interactive) mode
-(evil-define-key 'insert haskell-interactive-mode-map
+; haskell repl(lol) mode
+(evil-define-key 'insert haskell-lol-mode-map
   (kbd "C-l")   `haskell-interactive-mode-clear
   (kbd "<up>")  `haskell-interactive-mode-history-previous
   (kbd "<down>")`haskell-interactive-mode-history-next)

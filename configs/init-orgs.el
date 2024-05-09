@@ -146,37 +146,38 @@
     org-fontify-quote-and-verse-blocks t))
 
 
-(add-hook 'org-mode-hook #'org-modern-mode)
-(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
-(use-package! org-modern
-  :custom
-  ;; (org-modern-block-name nil)
-  (org-auto-align-tags nil)
-  (org-tags-column 0)
-  (org-fold-catch-invisible-edits 'show-and-error)
-  (org-special-ctrl-a/e t)
-  (org-insert-heading-respect-content t)
-  (org-ellipsis "…")
-  (org-agenda-tags-column 0)
-  (org-agenda-time-grid '((daily today require-timed) (800 1000 1200 1400 1600 1800 2000) " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
-  (org-agenda-current-time-string "⭠ now ─────────────────────────────────────────────────")
-  (org-modern-star 'replace)
+;; (add-hook 'org-mode-hook #'org-modern-mode)
+;; (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+;; (use-package! org-modern
+;;   :custom
+;;   (org-modern-block-name nil)
+;;   (org-auto-align-tags nil)
+;;   (org-tags-column 0)
+;;   (org-fold-catch-invisible-edits 'show-and-error)
+;;   (org-special-ctrl-a/e t)
+;;   (org-insert-heading-respect-content t)
+;;   (org-ellipsis "…")
+;;   (org-agenda-tags-column 0)
+;;   (org-agenda-time-grid '((daily today require-timed) (800 1000 1200 1400 1600 1800 2000) " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
+;;   (org-agenda-current-time-string "⭠ now ─────────────────────────────────────────────────")
+;;   (org-modern-star 'replace)
 
-  :config
-  (global-org-modern-mode)
-  (defun my-org-mode-no-line-number-hook () (setq display-line-numbers nil))
-  (add-hook 'org-mode-hook 'my-org-mode-no-line-number-hook))
+;;   :config
+;;   (global-org-modern-mode)
+;;   (defun my-org-mode-no-line-number-hook () (setq display-line-numbers nil))
+;;   (add-hook 'org-mode-hook '(lambda ()
+;;                             (setq display-line-numbers nil))))
 
 ;; (use-package! org-margin
 ;;   :config
 ;;   )
 
-(use-package! org-modern-indent
-  :custom
-  (org-modern-indent-begin " ")
-  (org-modern-indent-guide " ")
-  (org-modern-indent-end " ")
-  :config
-  (add-hook 'org-mode-hook #'org-modern-indent-mode 100)) ;; 90 is the depth
+;; (use-package! org-modern-indent
+;;   :config
+;;   (setq
+;;    org-modern-indent-begin " "
+;;    org-modern-indent-guide " "
+;;    org-modern-indent-end " ")
+;;   (add-hook 'org-mode-hook #'org-modern-indent-mode 100)) ;; 90 is the depth
 
 (provide 'init-orgs)

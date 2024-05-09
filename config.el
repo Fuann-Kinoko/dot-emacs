@@ -119,6 +119,8 @@
 (require 'my-treesitter)
 (require 'my-fcitx)
 (require 'my-calibredb)
+(require 'my-pangu-spacing)
+(require 'my-better-jumper)
 
 ; misc configs
 (add-to-list 'load-path "~/.config/doom/configs")
