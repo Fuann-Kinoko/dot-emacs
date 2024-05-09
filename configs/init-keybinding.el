@@ -7,6 +7,11 @@
 ;; (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 ;; (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
+;; Embark settings
+(setq embark-quit-after-action '((kill-buffer . nil) (t . t)))
+(map! :map 'minibuffer-mode-map
+  "M-e"    #'embark-act)
+
 ;; remap yes or no -> or or no :)
 (define-key y-or-n-p-map      "o" 'act)
 (define-key query-replace-map "o" 'act)
@@ -85,6 +90,7 @@
   (kbd "C-L")    '("multi next"     . evil-multiedit-match-and-next)
   (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
   (kbd "M-L")    '("smart enlarge"  . er/expand-region)
+  (kbd "M-e")    '("embark"         . embark-act)
   (kbd "M-b")    '("buffers"        . +vertico/switch-workspace-buffer)
   (kbd "M-H")    '("smart shrink"   . er/contract-region)
   (kbd "M-w")    '("alt workspace"  . +workspace/switch-to)
@@ -106,6 +112,7 @@
 
 (evil-define-key 'insert 'global
   (kbd "C-SPC")  '("complete filename"     . comint-dynamic-complete-filename)
+  (kbd "M-e")    '("embark"         . embark-act)
   (kbd "C-S-V")  '("paste" . evil-paste-after))
 
 ;; (general-nmap "RET" (general-simulate-key "cio"))

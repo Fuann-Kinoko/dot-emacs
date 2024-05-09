@@ -23,7 +23,7 @@
           )
           (consult-imenu buffer indexed)
           (execute-extended-command indexed)
-          ;; (+vertico/switch-workspace-buffer flat)
+          (+vertico/switch-workspace-buffer (:not posframe) buffer)
           ;; (query-replace flat)
           (moon/query-replace-region (:not posframe) flat)
           (moon/query-replace-point (:not posframe) flat)
