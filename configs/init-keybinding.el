@@ -40,22 +40,22 @@
   (let ((sel (buffer-substring-no-properties
                   (region-beginning)
                   (region-end))))
-        (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
-                (lambda () (setq vr--regexp-string sel))))  ;;
-        (call-interactively 'vr/query-replace))))           ;;
-  ;; (vr/query-replace sel
-  ;;                  (completing-read (format "Replace \"%s\" to: " sel) ())
-  ;;                  nil (beginning-of-line))))
+        ;; (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
+        ;;         (lambda () (setq vr--regexp-string sel))))  ;;
+        ;; (call-interactively 'vr/query-replace))))           ;;
+  (query-replace sel
+                   (completing-read (format "Replace \"%s\" to: " sel) ())
+                   nil (beginning-of-line))))
 (defun moon/query-replace-point ()
   "Query replace thing at point."
   (interactive)
   (let ((word (thing-at-point 'word t)))
-        (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
-                (lambda () (setq vr--regexp-string word)))) ;;
-        (call-interactively 'vr/query-replace))))           ;;
-    ;; (vr/query-replace word
-    ;;                (completing-read (format "Replace \"%s\" to: " word) ())
-    ;;                nil (beginning-of-line))))
+        ;; (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
+        ;;         (lambda () (setq vr--regexp-string word)))) ;;
+        ;; (call-interactively 'vr/query-replace))))           ;;
+    (query-replace word
+                   (completing-read (format "Replace \"%s\" to: " word) ())
+                   nil (beginning-of-line))))
 
 (defun revert-buffer-fine-no-confirm ()
   "revert buffer fine without confirm"
@@ -91,6 +91,7 @@
   (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
   (kbd "M-L")    '("smart enlarge"  . er/expand-region)
   (kbd "M-e")    '("embark"         . embark-act)
+  ;; (kbd "M-p")    '("paste previous" . evil-paste-pop) ;; this is replaced by C-p
   (kbd "M-b")    '("buffers"        . +vertico/switch-workspace-buffer)
   (kbd "M-H")    '("smart shrink"   . er/contract-region)
   (kbd "M-w")    '("alt workspace"  . +workspace/switch-to)
@@ -111,9 +112,10 @@
   "-"   'evilnc-comment-or-uncomment-lines)
 
 (evil-define-key 'insert 'global
-  (kbd "C-SPC")  '("complete filename"     . comint-dynamic-complete-filename)
-  (kbd "M-e")    '("embark"         . embark-act)
-  (kbd "C-S-V")  '("paste" . evil-paste-after))
+  (kbd "C-SPC")  '("complete filename" . comint-dynamic-complete-filename)
+  (kbd "M-e")    '("embark"            . embark-act)
+  (kbd "M-y")    '("yasnippet expand"  . yas-expand)
+  (kbd "C-S-V")  '("paste"             . evil-paste-after))
 
 ;; (general-nmap "RET" (general-simulate-key "cio"))
 ;; (general-nmap "f"   (general-simulate-key "gs SPC"))
