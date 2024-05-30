@@ -20,15 +20,15 @@
 
 
 ;; (setq doom-font (font-spec :family "Intel One Mono" :size 33 :weight 'regular))
-(setq doom-font (font-spec :family "Iosevka Nerd Font Mono" :size 37 :weight 'regular :spacing 100))
-(setq doom-variable-pitch-font (font-spec :family "Vollkorn"))
+(setq doom-font (font-spec :family "Iosevka NFM" :size 37 :weight 'regular :spacing 100))
+;; (setq doom-variable-pitch-font (font-spec :family "Vollkorn"))
 ;; (setq doom-font (font-spec :family "Spleen 16x32" :size 41 :weight 'regular))
 ;; (setq doom-font (font-spec :family "FTT-Chiaro B + FandolSong" :size 38 :weight 'regular))
 
 ;; (setq my-cjk-font-name "Fusion Pixel 12px Proportional zh_hant")
 ;; (setq my-cjk-font-name "FTT-Chiaro B + FandolSong")
 ;; (setq my-cjk-font-name "Sarasa Gothic SC")
-(setq my-cjk-font-name "Sarasa Term SC")
+(setq my-cjk-font-name "Sarasa Gothic HC")
 
 ;; 测试中文输入
 (defun my-cjk-font()
@@ -110,20 +110,20 @@
       trash-directory "~/trash/")
 
 ; settings for each installed package
-(add-to-list 'load-path "~/.config/doom/configs/module-packages")
+(add-to-list 'load-path "~/.doom.d/configs/module-packages")
 (use-package! evil-nerd-commenter)
 (use-package! rainbow-mode)
 (require 'my-dirvish)
 (require 'my-vertico)
 (require 'my-auto-dark)
 (require 'my-treesitter)
-(require 'my-fcitx)
+;; (require 'my-fcitx)
 (require 'my-calibredb)
 (require 'my-pangu-spacing)
 (require 'my-better-jumper)
 
 ; misc configs
-(add-to-list 'load-path "~/.config/doom/configs")
+(add-to-list 'load-path "~/.doom.d/configs")
 (require 'init-keybinding)
 (require 'init-modes)
 (require 'init-orgs)
@@ -131,5 +131,5 @@
 (require 'init-debug)
 
 ; misc utils
-(add-to-list 'load-path "~/.config/doom/utils")
+(add-to-list 'load-path "~/.doom.d/utils")
 (require 'my-dash-board)

@@ -46,7 +46,6 @@
 ;; (package! some-package)
 (package! evil-nerd-commenter)
 (package! dirvish)
-(package! telega)
 (package! ef-themes)
 (package! rainbow-mode)
 (package! atomic-chrome)

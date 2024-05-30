@@ -76,8 +76,8 @@
 ;; thare are also hooks added in ~/.config/doom/configs/packages/auto-dark.el
 (setq fancy-splash-image
  (if (auto-dark--is-dark-mode)
-   "~/.config/doom/banner3.pbm"
-   "~/.config/doom/banner3_inv.pbm"
+   "~/.doom.d/banner3.pbm"
+   "~/.doom.d/banner3_inv.pbm"
    ))
 
 (setq +doom-dashboard-functions `(custom-dashboard-widget-space-seperator

@@ -38,17 +38,16 @@
   (org-mode . org-appear-mode)
   )
 
-(use-package! org-roam
-  :defer t
-  :ensure t
-  :bind
-  (:map org-mode-map
-        ("C-SPC" . completion-at-point))
-  :config
-  (org-roam-db-autosync-enable))
+;; (use-package! org-roam
+;;   :defer t
+;;   :ensure t
+;;   :bind
+;;   (:map org-mode-map
+;;         ("C-SPC" . completion-at-point))
+;;   :config
+;;   (org-roam-db-autosync-enable))
 
-(use-package! org-latex-preview
-  :defer t
+(use-package! org-latex-preview :defer t
   :init
   (setq org-startup-with-latex-preview 't)
   (setq org-latex-preview-live nil)

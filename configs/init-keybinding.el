@@ -97,6 +97,7 @@
   (kbd "M-w")    '("alt workspace"  . +workspace/switch-to)
   (kbd "SPC fn") '("yank file name" . my-yank-file-name)
   (kbd "SPC e")  '("dirvish side"   . dirvish-side)
+  (kbd "M-<f4>") '("dirvish side"   . kill-emacs)
   (kbd "<f8>")   '("next error"     . next-error))
 
 (map! :leader
