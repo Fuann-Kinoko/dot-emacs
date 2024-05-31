@@ -69,6 +69,7 @@
 (package! citre)
 (package! calibredb)
 
+(package! solo-jazz-theme)
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
 ;; https://github.com/radian-software/straight.el#the-recipe-format
