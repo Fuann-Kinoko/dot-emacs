@@ -27,10 +27,14 @@
     (insert list-display-name)
     (mapc (lambda (el)
             (insert "\n          ")
-            (let ((button-text
-                   (format "%2s %s" (number-to-string
-                                     recent-file-list-nr)
-                           (abbreviate-file-name el))))
+            (let* ((allow-text-length (- +doom-dashboard--width 20))
+                   (full-text (abbreviate-file-name el))
+                   (subtracted-text (if (> (length full-text) allow-text-length)
+                                    (concat "..." (substring full-text (- (length full-text) allow-text-length)))
+                                  full-text))
+                   (button-text (format "%2s %s" (number-to-string
+                                                   recent-file-list-nr)
+                                                 subtracted-text)))
               (widget-create 'push-button
                              :action (lambda (&rest _)
                                        (find-file-existing el))
