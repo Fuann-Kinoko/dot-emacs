@@ -146,7 +146,7 @@ Defaults to \"material\""
         gm/cyan         "#89b482"       ;; aqua
         gm/dark-cyan    "#72966c")))    ;; dimAqua
 
-(def-doom-theme doom-gruvbox-material
+ (def-doom-theme doom-gruvbox-material
   "A dark theme inspired by gruvbox material"
   ;; name       default                 256       16
   ((bg          `(,gm/bg                "#282828"       nil            ))
@@ -185,13 +185,13 @@ Defaults to \"material\""
    (highlight       blue)
    (vertical-bar   (doom-darken base1 0.1))
    (selection       dark-blue)
-   (builtin         magenta)
+   (builtin         orange)
    ;; (comments        (if doom-gruvbox-material-brighter-comments dark-cyan
    ;;                    (doom-blend yellow base8 0.5)))
    (comments       "#928374")
-   (doc-comments   (doom-darken (if doom-gruvbox-material-brighter-comments green green) 0.15))
-   (constants      magenta)
-   (functions      cyan)
+   (doc-comments   yellow)
+   (constants      orange)
+   (functions      blue)
    ;; (keywords       (doom-darken dark-green 0.25))
    (keywords       red)
    (methods        cyan)
@@ -352,12 +352,12 @@ Defaults to \"material\""
    (org-level-8 :foreground dark-yellow :weight 'semi-bold)
 
    ;; rainbow and parenthesis
-   (rainbow-delimiters-depth-1-face :foreground dark-orange)
+   (rainbow-delimiters-depth-1-face :foreground orange)
    (rainbow-delimiters-depth-2-face :foreground violet)
-   (rainbow-delimiters-depth-3-face :foreground dark-cyan)
-   (rainbow-delimiters-depth-4-face :foreground dark-yellow)
+   (rainbow-delimiters-depth-3-face :foreground cyan)
+   (rainbow-delimiters-depth-4-face :foreground yellow)
    (rainbow-delimiters-unmatched-face: :foreground fg :background 'nil)
-   (show-paren-match :foreground bg :background dark-red)
+   (show-paren-match :foreground bg :background red)
 
    ;; tree sitter
    (tree-sitter-hl-face:method.call :foreground cyan :weight 'semi-bold)
