@@ -67,6 +67,18 @@
   (lol)
   (repeat-complex-command 1))
 
+(defun intelligent-close ()
+  "quit a frame the same way no matter what kind of frame you are on"
+  (interactive)
+  (if (eq (car (visible-frame-list)) (selected-frame))
+      ;;for parent/master frame...
+      (if (> (length (visible-frame-list)) 1)
+          ;;close a parent with children present
+   (delete-frame (selected-frame))
+        ;;close a parent with no children present
+ (save-buffers-kill-emacs))
+    ;;close a child frame
+    (delete-frame (selected-frame))))
 ; ================== bindings ==================
 ;
 (general-evil-setup)
@@ -97,7 +109,7 @@
   (kbd "M-w")    '("alt workspace"  . +workspace/switch-to)
   (kbd "SPC fn") '("yank file name" . my-yank-file-name)
   (kbd "SPC e")  '("dirvish side"   . dirvish-side)
-  (kbd "M-<f4>") '("dirvish side"   . kill-emacs)
+  (kbd "M-<f4>") '("dirvish side"   . intelligent-close)
   (kbd "<f8>")   '("next error"     . next-error))
 
 (map! :leader
