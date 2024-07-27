@@ -25,6 +25,10 @@
 
     ; jump scenarios
     (advice-add 'evil-goto-definition :around #'my-jump-advice)
+    (advice-add '+lookup/definition :around #'my-jump-advice)
+    (advice-add '+lookup/references :around #'my-jump-advice)
+    (advice-add 'jump-backward-center :around #'my-jump-advice)
+    (advice-add 'jump-forward-center :around #'my-jump-advice)
     (advice-add 'evil-goto-mark  :around #'my-jump-advice)
     (advice-add 'sp-next-sexp  :around #'my-jump-advice)
     (advice-add 'backward-up-list  :around #'my-jump-advice)

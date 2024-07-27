@@ -36,9 +36,12 @@
 ;; enlarge org mode title
 
 (setq scroll-preserve-screen-position t
-      scroll-margin 0
-      scroll-conservatively 97)
+      scroll-margin 0)
 (setq display-line-numbers-width-start t)
 ;; let scroll slow down a little bit
+
+
+;; auto recenter after C-i C-o jump
+(setq scroll-conservatively 1)
 
 (provide 'init-ui)

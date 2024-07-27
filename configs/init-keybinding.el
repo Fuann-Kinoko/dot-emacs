@@ -10,7 +10,8 @@
 ;; Embark settings
 (setq embark-quit-after-action '((kill-buffer . nil) (t . t)))
 (map! :map 'minibuffer-mode-map
-  "M-e"    #'embark-act)
+  "M-e"    #'embark-act
+  "C-o"    #'doom/delete-backward-word)
 
 ;; remap yes or no -> or or no :)
 (define-key y-or-n-p-map      "o" 'act)
@@ -73,6 +74,15 @@
 (global-set-key [escape] 'keyboard-quit)
 (setq avy-timeout-seconds 0.2)
 
+(defun jump-backward-center ()
+  "jump backward then recenter"
+  (interactive)
+  (better-jumper-jump-backward))
+(defun jump-forward-center ()
+  "jump forward then recenter"
+  (interactive)
+  (better-jumper-jump-forward))
+
 ;; normal keybindings:
 (evil-define-key 'normal 'global
   "J"   'back-to-indentation
@@ -80,8 +90,8 @@
   "gh" '+lookup/documentation
   "gb"  'eval-defun
   "-"   'evilnc-comment-or-uncomment-lines
-  (kbd "C-o")    '("jump to back"   . (lambda () (interactive) (better-jumper-jump-backward) (recenter-top-bottom)))
-  (kbd "C-i")    '("jump to fore"   . (lambda () (interactive) (better-jumper-jump-forward) (recenter-top-bottom)))
+  ;; (kbd "<C-o>")  '("jump to back"   . jump-backward-center)
+  ;; (kbd "<C-i>")  '("jump to fore"   . jump-forward-center)
   (kbd "C-s")    '("jump to below"  . save-buffer)
   (kbd "s")      '("sneak"          . my-ace-sneak)
   (kbd "C-j")    '("jump to below"  . sp-next-sexp)
@@ -91,6 +101,7 @@
   (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
   (kbd "M-L")    '("smart enlarge"  . er/expand-region)
   (kbd "M-e")    '("embark"         . embark-act)
+  (kbd "M-n")    '("consult notes"  . consult-notes)
   ;; (kbd "M-p")    '("paste previous" . evil-paste-pop) ;; this is replaced by C-p
   (kbd "M-b")    '("buffers"        . +vertico/switch-workspace-buffer)
   (kbd "M-H")    '("smart shrink"   . er/contract-region)
@@ -114,7 +125,8 @@
 (evil-define-key 'insert 'global
   (kbd "C-SPC")  '("complete filename" . comint-dynamic-complete-filename)
   (kbd "M-e")    '("embark"            . embark-act)
-  (kbd "M-y")    '("yasnippet expand"  . yas-expand)
+  (kbd "C-o")    '("delete word"       . doom/delete-backward-word)
+  (kbd "M-y")    '("yasnippet expand"  . yas-expand) ;
   (kbd "C-S-V")  '("paste"             . evil-paste-after))
 
 ;; (general-nmap "RET" (general-simulate-key "cio"))

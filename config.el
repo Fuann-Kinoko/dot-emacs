@@ -20,7 +20,7 @@
 
 
 ;; (setq doom-font (font-spec :family "Intel One Mono" :size 33 :weight 'regular))
-(setq doom-font (font-spec :family "Iosevka Nerd Font Mono" :size 37 :weight 'regular :spacing 100))
+(setq doom-font (font-spec :family "Iosevka Nerd Font Mono" :size 26 :weight 'regular :spacing 100))
 (setq doom-variable-pitch-font (font-spec :family "Vollkorn"))
 ;; (setq doom-font (font-spec :family "Spleen 16x32" :size 41 :weight 'regular))
 ;; (setq doom-font (font-spec :family "FTT-Chiaro B + FandolSong" :size 38 :weight 'regular))
@@ -120,7 +120,7 @@
 (require 'my-fcitx)
 (require 'my-calibredb)
 (require 'my-pangu-spacing)
-(require 'my-better-jumper)
+;; (require 'my-better-jumper)
 
 ; misc configs
 (add-to-list 'load-path "~/.config/doom/configs")
@@ -133,3 +133,8 @@
 ; misc utils
 (add-to-list 'load-path "~/.config/doom/utils")
 (require 'my-dash-board)
+(require 'kdlang-mode)
+
+; dap settings
+(require 'dap-lldb)
+(require 'dap-cpptools)

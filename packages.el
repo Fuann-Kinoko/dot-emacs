@@ -55,6 +55,8 @@
 (package! vertico-posframe)
 (package! pangu-spacing)
 
+(package! denote)
+(package! consult-notes)
 (package! org-download)
 (package! org-ros)
 (package! org-appear)

@@ -13,7 +13,7 @@
 (add-to-list 'auto-mode-alist '("\\.kbd\\'" . lisp-mode))
 
 ;; kdl mode (inherited from sdlang mode)
-(add-to-list 'auto-mode-alist '("\\.kdl\\'" . sdlang-mode))
+;; (add-to-list 'auto-mode-alist '("\\.kdl\\'" . sdlang-mode))
 
 
 (provide 'init-modes)

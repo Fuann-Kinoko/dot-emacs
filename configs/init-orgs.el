@@ -9,7 +9,7 @@
 (require 'org-download)
 (require 'org-ros)
 (add-hook 'dired-mode-hook 'org-download-enable)
-(setq org-image-actual-width 300)
+(setq org-image-actual-width 600)
 
 (setq line-spacing 0.1)
 (setq org-startup-with-inline-images t)
@@ -38,14 +38,32 @@
   (org-mode . org-appear-mode)
   )
 
-(use-package! org-roam
-  :defer t
-  :ensure t
-  :bind
-  (:map org-mode-map
-        ("C-SPC" . completion-at-point))
+;; (use-package! org-roam
+;;   :defer t
+;;   :ensure t
+;;   :bind
+;;   (:map org-mode-map
+;;         ("C-SPC" . completion-at-point))
+;;   :config
+;;   (org-roam-db-autosync-enable)
+;;   (setq org-roam-node-display-template
+;;       (concat "${doom-hierarchy:*}" (propertize "${tags:10}" 'face 'org-tag))))
+(use-package! denote
+  :custom
+  (denote-directory "/home/akerue/org/denote")
+  (denote-known-keywords '("book" "main" "reference"))
+  (denote-rename-buffer-format "[D] %b%t")
   :config
-  (org-roam-db-autosync-enable))
+  (denote-rename-buffer-mode)
+  )
+(use-package! consult-notes
+  :commands
+  (consult-notes
+   consult-notes-search-in-all-notes)
+  :config
+  (when (locate-library "denote")
+    (consult-notes-denote-mode))
+  )
 
 (use-package! org-latex-preview
   :defer t
