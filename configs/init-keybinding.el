@@ -68,10 +68,17 @@
   (lol)
   (repeat-complex-command 1))
 
+(defun reload-current-dired-buffer ()
+  "Reload current `dired-mode' buffer."
+  (let* ((dir (dired-current-directory)))
+    (progn (kill-buffer (current-buffer))
+           (dired dir))))
+
 ; ================== bindings ==================
 ;
 (general-evil-setup)
-(global-set-key [escape] 'keyboard-quit)
+;; (global-set-key [escape] 'keyboard-quit)
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (setq avy-timeout-seconds 0.2)
 
 (defun jump-backward-center ()
@@ -153,18 +160,22 @@
 ;; dired keybindings:
 (map! :leader
       (:prefix ("d" . "dired")
-       :desc "open dired in current file" "d" #'dirvish
+       :desc "open dired in current file" "d" #'dired-jump
        :desc "jump history" "j" #'dirvish-history-jump))
 (evil-define-key 'normal dired-mode-map
   "h"         'dired-up-directory
   "l"         'dired-find-file
   "-"         `dired-do-kill-lines
   "w"         `dirvish-layout-toggle
+  "r"         `revert-buffer
+  "R"         `wdired-change-to-wdired-mode
+  "X"         `dired-do-rename
   "o"         `dirvish-quick-access
   "i"         `dirvish-file-info-menu
   "y"         `dirvish-yank-menu
   "f"         `dirvish-narrow
   ","         `dirvish-quicksort
+  "."         `dired-omit-mode
   (kbd "s")   `dirvish-fd
   (kbd "TAB") `other-window
   (kbd "M-l") `dirvish-ls-switches-menu

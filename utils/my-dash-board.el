@@ -92,5 +92,6 @@
 
 (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
 (add-hook! '+doom-dashboard-mode-hook (hide-mode-line-mode 1) (hl-line-mode -1))
+(add-hook! '+doom-dashboard-functions (hide-mode-line-mode 1))
 
 (provide 'my-dash-board)

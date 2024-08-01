@@ -107,7 +107,7 @@
 ;; they are implemented.
 
 (setq delete-by-moving-to-trash t
-      trash-directory "~/trash/")
+      trash-directory "~/.local/share/Trash/")
 
 ; settings for each installed package
 (add-to-list 'load-path "~/.config/doom/configs/module-packages")
@@ -118,12 +118,13 @@
 (require 'my-auto-dark)
 (require 'my-treesitter)
 (require 'my-fcitx)
-(require 'my-calibredb)
+;; (require 'my-calibredb)
 (require 'my-pangu-spacing)
 ;; (require 'my-better-jumper)
 
 ; misc configs
 (add-to-list 'load-path "~/.config/doom/configs")
+(require 'init-system)
 (require 'init-keybinding)
 (require 'init-modes)
 (require 'init-orgs)
@@ -134,7 +135,3 @@
 (add-to-list 'load-path "~/.config/doom/utils")
 (require 'my-dash-board)
 (require 'kdlang-mode)
-
-; dap settings
-(require 'dap-lldb)
-(require 'dap-cpptools)

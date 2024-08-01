@@ -14,6 +14,36 @@
 (setq line-spacing 0.1)
 (setq org-startup-with-inline-images t)
 
+;; prettify symbol
+(setq-default prettify-symbols-alist
+  '(("[ ]"           . "")
+  ("[-]"             . "")
+  ("[X]"             . "")
+  ("#+BEGIN_SRC"     . "✎")
+  ("#+END_SRC"       . "⇤")
+  ("#+begin_src"     . "✎")
+  ("#+end_src"       . "⇤")
+  ("#+RESULTS:"      . "⟾")
+  ("#+begin_quote"   . "»")
+  ("#+end_quote"     . "⇤")
+  ("#+begin_verse"   . "ζ")
+  ("#+end_verse"     . "⇤")
+  ("#+begin_example" . "⟝")
+  ("#+end_example"   . "⇤")
+  ("#+begin_export"  . "🙵")
+  ("#+end_export"    . "⇤")
+  ("#+BEGIN_QUOTE"   . "»")
+  ("#+END_QUOTE"     . "⇤")
+  ("#+BEGIN_VERSE"   . "ζ")
+  ("#+END_VERSE"     . "⇤")
+  ("#+BEGIN_EXAMPLE" . "⟝")
+  ("#+END_EXAMPLE"   . "⇤")
+  ("#+BEGIN_EXPORT"  . "🙵")
+  ("#+END_EXPORT"    . "⇤")
+  ("#+END:"          . "⇤")
+  ("#+BEGIN:"        . "✎")
+  ("#+CAPTION:"      . "✑")
+  ("#+ATTR_LATEX"    . "🄛")))
 
 ;; (use-package deft
 ;;   :defer t
@@ -36,6 +66,7 @@
   (org-appear-inside-latex t)
   :hook
   (org-mode . org-appear-mode)
+  (org-mode . prettify-symbols-mode)
   )
 
 ;; (use-package! org-roam
@@ -52,7 +83,9 @@
   :custom
   (denote-directory "/home/akerue/org/denote")
   (denote-known-keywords '("book" "main" "reference"))
-  (denote-rename-buffer-format "[D] %b%t")
+  (denote-rename-buffer-format "[D] %t")
+  (denote-excluded-files-regexp "^.*(png|jpg|jpeg)$")
+  (denote-backlinks-show-context 't)
   :config
   (denote-rename-buffer-mode)
   )
@@ -94,7 +127,7 @@
   ;; (add-hook 'org-latex-preview-auto-ignored-commands 'previous-line)
 
   ;; Enable consistent equation numbering
-  (setq org-latex-preview-numbered t)
+  (setq org-latex-preview-numbered nil)
 
   ;; Bonus: Turn on live previews.  This shows you a live preview of a LaTeX
   ;; fragment and updates the preview in real-time as you edit it.
