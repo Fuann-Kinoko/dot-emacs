@@ -323,11 +323,24 @@ Defaults to \"material\""
 
    ;; magit
    (magit-section-heading :foreground blue :weight 'bold)
+   ;; ;;;; diff-mode
+   ;; (diff-removed :foreground red
+   ;;               :background fw-red-blend)
+   ;;;; ediff <built-in>
+   (ediff-current-diff-A
+                                :background (doom-darken red 0.5))
+   (ediff-current-diff-B
+                                :background (doom-darken green 0.5))
+   (ediff-current-diff-C
+                                :background (doom-darken blue 0.8))
+   (ediff-current-diff-Ancestor
+                                :background (doom-darken teal 0.8))
 
    ;; markdown-mode
    (markdown-markup-face :foreground base5)
    (markdown-header-face :inherit 'bold :foreground blue)
    ((markdown-code-face &override) :background (doom-lighten base3 0.05))
+
 
    ;; org-mode
    (org-hide :foreground hidden)
