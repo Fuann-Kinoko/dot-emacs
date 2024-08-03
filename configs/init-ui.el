@@ -41,9 +41,10 @@
   (set-popup-rule! "^\\*rustic-compilation" :height 0.5))
 ;; make rust cargo run window takes half screen
 
-(setq aw-char-position 'left)
-(set-face-attribute 'aw-leading-char-face nil
-                    :height 2.0)
+(after! ace-window
+  (setq aw-char-position 'left)
+  (set-face-attribute 'aw-leading-char-face nil
+                      :height 2.0))
 ;; change the size and the font of indicator triggered by ace-window(C-w C-w)
 
 (setq lsp-signature-function 'lsp-signature-posframe)

@@ -1,7 +1,13 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-(setq delete-by-moving-to-trash t
-      trash-directory "~/.local/share/Trash/")
+; misc configs
+(add-to-list 'load-path "~/.config/doom/configs")
+(require 'init-system)
+(require 'init-keybinding)
+(require 'init-modes)
+(require 'init-orgs)
+(require 'init-ui)
+(require 'init-debug)
 
 ; settings for each installed package
 (add-to-list 'load-path "~/.config/doom/configs/module-packages")
@@ -15,15 +21,6 @@
 (require 'my-pangu-spacing)
 ;; (require 'my-calibredb)
 ;; (require 'my-better-jumper)
-
-; misc configs
-(add-to-list 'load-path "~/.config/doom/configs")
-(require 'init-system)
-(require 'init-keybinding)
-(require 'init-modes)
-(require 'init-orgs)
-(require 'init-ui)
-(require 'init-debug)
 
 ; misc utils
 (add-to-list 'load-path "~/.config/doom/utils")
