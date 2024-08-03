@@ -118,8 +118,8 @@
 (require 'my-auto-dark)
 (require 'my-treesitter)
 (require 'my-fcitx)
-;; (require 'my-calibredb)
 (require 'my-pangu-spacing)
+;; (require 'my-calibredb)
 ;; (require 'my-better-jumper)
 
 ; misc configs
@@ -135,3 +135,4 @@
 (add-to-list 'load-path "~/.config/doom/utils")
 (require 'my-dash-board)
 (require 'kdlang-mode)
+;; (require 'my-exwm)

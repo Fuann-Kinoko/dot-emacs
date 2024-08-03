@@ -1,4 +1,4 @@
-;;; doom-mountain.el --- Mountain Theme for emacs -*- lexical-binding: t; no-byte-compile: t; -*-
+;;; my-mountain.el --- Mountain Theme for emacs -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;
 ;;; Commentary:
 ;;
@@ -11,20 +11,20 @@
 ;;
 ;;; Variables
 
-(defgroup doom-mountain-theme nil
-  "Options for the `doom-mountain' theme."
+(defgroup my-mountain-theme nil
+  "Options for the `my-mountain' theme."
   :group 'doom-themes)
 
-(defcustom doom-mountain-padded-modeline doom-themes-padded-modeline
+(defcustom my-mountain-padded-modeline doom-themes-padded-modeline
   "If non-nil, adds a 4px padding to the mode-line.
 Can be an integer to determine the exact padding."
-  :group 'doom-mountain-theme
+  :group 'my-mountain-theme
   :type '(choice integer boolean))
 
 ;;
 ;;; Theme definition
 
-(def-doom-theme doom-mountain
+(def-doom-theme my-mountain
   "Mountain Theme for Emacs"
 
   ;; name        default   256           16
@@ -107,9 +107,9 @@ Can be an integer to determine the exact padding."
    (modeline-fg     fg)
    (modeline-fg-alt base4)
    (-modeline-pad
-	(when doom-mountain-padded-modeline
-	  (if (integerp doom-mountain-padded-modeline)
-		  doom-mountain-padded-modeline
+	(when my-mountain-padded-modeline
+	  (if (integerp my-mountain-padded-modeline)
+		  my-mountain-padded-modeline
 		4))))
 
   ;; --- faces ------------------------------
@@ -194,4 +194,4 @@ Can be an integer to determine the exact padding."
   ;; ()
   )
 
-;;; doom-mountain.el ends here
+;;; my-mountain.el ends here

@@ -99,7 +99,7 @@
   "-"   'evilnc-comment-or-uncomment-lines
   ;; (kbd "<C-o>")  '("jump to back"   . jump-backward-center)
   ;; (kbd "<C-i>")  '("jump to fore"   . jump-forward-center)
-  (kbd "C-s")    '("jump to below"  . save-buffer)
+  (kbd "C-s")    '("save buffer"    . save-buffer)
   (kbd "s")      '("sneak"          . my-ace-sneak)
   (kbd "C-j")    '("jump to below"  . sp-next-sexp)
   (kbd "C-k")    '("jump to above"  . backward-up-list)
@@ -134,6 +134,7 @@
   (kbd "M-e")    '("embark"            . embark-act)
   (kbd "C-o")    '("delete word"       . doom/delete-backward-word)
   (kbd "M-y")    '("yasnippet expand"  . yas-expand) ;
+  (kbd "C-s")    '("save buffer"       . save-buffer)
   (kbd "C-S-V")  '("paste"             . evil-paste-after))
 
 ;; (general-nmap "RET" (general-simulate-key "cio"))
