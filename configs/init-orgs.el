@@ -61,12 +61,12 @@
 
 (use-package! org-appear
   :defer t
-  :custom
-  (org-hide-emphasis-markers t)
-  (org-appear-inside-latex t)
   :hook
   (org-mode . org-appear-mode)
   (org-mode . prettify-symbols-mode)
+  :custom
+  (org-hide-emphasis-markers t)
+  (org-appear-inside-latex t)
   )
 
 ;; (use-package! org-roam
@@ -99,11 +99,12 @@
   )
 
 (use-package! org-latex-preview
-  :defer t
   :init
   (setq org-startup-with-latex-preview 't)
   (setq org-latex-preview-live nil)
   (setq org-pretty-entities 't)
+  :hook
+  (org-mode . org-latex-preview-auto-mode)
   :config
   ;; Increase preview width
   (setq org-latex-preview-appearance-options
@@ -117,10 +118,6 @@
   ;; Use dvisvgm to generate previews
   ;; You don't need this, it's the default:
   (setq org-latex-preview-process-default 'dvisvgm)
-
-  ;; Turn on auto-mode, it's built into Org and much faster/more featured than
-  ;; org-fragtog. (Remember to turn off/uninstall org-fragtog.)
-  (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
 
   ;; Block C-n and C-p from opening up previews when using auto-mode
   ;; (add-hook 'org-latex-preview-auto-ignored-commands 'next-line)
@@ -139,8 +136,7 @@
 ;;
 ;; ;; Use CDLaTeX to improve editing experiences
 (use-package! cdlatex
-  :defer t
-  :config (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
+  :hook (org-mode . cdlatex-mode))
 
 (after! org
   (set-ligatures! 'org-mode

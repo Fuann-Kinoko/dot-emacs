@@ -21,6 +21,7 @@
 (require 'my-pangu-spacing)
 ;; (require 'my-calibredb)
 ;; (require 'my-better-jumper)
+(require 'my-dimmer)
 
 ; misc utils
 (add-to-list 'load-path "~/.config/doom/utils")

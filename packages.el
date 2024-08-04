@@ -5,8 +5,7 @@
 ;; on the command line, then restart Emacs for the changes to take effect -- or
 ;; use 'M-x doom/reload'.
 
-(package! exwm)
-
+;; (package! exwm)
 
 (package! org :recipe
   (:host nil :repo "https://git.tecosaur.net/mirrors/org-mode.git" :remote "mirror" :fork
@@ -42,6 +41,7 @@
 (package! fcitx)
 (package! better-jumper)
 (package! visual-regexp)
+(package! auto-dim-other-buffers)
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;; (package! some-package)

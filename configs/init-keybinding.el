@@ -11,7 +11,8 @@
 (setq embark-quit-after-action '((kill-buffer . nil) (t . t)))
 (map! :map 'minibuffer-mode-map
   "M-e"    #'embark-act
-  "C-o"    #'doom/delete-backward-word)
+  "C-o"    #'my/delete-word-backward
+  "C-<backspace>" #'my/delete-word-backward)
 
 ;; remap yes or no -> or or no :)
 (define-key y-or-n-p-map      "o" 'act)
@@ -74,6 +75,17 @@
     (progn (kill-buffer (current-buffer))
            (dired dir))))
 
+;; delete not kill it into kill-ring
+;; _based on_ http://ergoemacs.org/emacs/emacs_kill-ring.html
+(defun my/delete-word-backward (arg)
+  "delete backward, not triggering `kill-ring'."
+  (interactive "p")
+  (delete-region
+   (point)
+   (progn
+     (forward-word (- arg))
+     (point))))
+
 ; ================== bindings ==================
 ;
 (general-evil-setup)
@@ -97,25 +109,28 @@
   "gh" '+lookup/documentation
   "gb"  'eval-defun
   "-"   'evilnc-comment-or-uncomment-lines
-  ;; (kbd "<C-o>")  '("jump to back"   . jump-backward-center)
-  ;; (kbd "<C-i>")  '("jump to fore"   . jump-forward-center)
-  (kbd "C-s")    '("save buffer"    . save-buffer)
-  (kbd "s")      '("sneak"          . my-ace-sneak)
-  (kbd "C-j")    '("jump to below"  . sp-next-sexp)
-  (kbd "C-k")    '("jump to above"  . backward-up-list)
-  (kbd "C-B")    '("replace word"   . moon/query-replace-point)
-  (kbd "C-L")    '("multi next"     . evil-multiedit-match-and-next)
-  (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
-  (kbd "M-L")    '("smart enlarge"  . er/expand-region)
-  (kbd "M-e")    '("embark"         . embark-act)
-  (kbd "M-n")    '("consult notes"  . consult-notes)
-  ;; (kbd "M-p")    '("paste previous" . evil-paste-pop) ;; this is replaced by C-p
-  (kbd "M-b")    '("buffers"        . +vertico/switch-workspace-buffer)
-  (kbd "M-H")    '("smart shrink"   . er/contract-region)
-  (kbd "M-w")    '("alt workspace"  . +workspace/switch-to)
-  (kbd "SPC fn") '("yank file name" . my-yank-file-name)
-  (kbd "SPC e")  '("dirvish side"   . dirvish-side)
-  (kbd "<f8>")   '("next error"     . next-error))
+  ;; (kbd "<C-o>")  '("jump to back"            . jump-backward-center)
+  ;; (kbd "<C-i>")  '("jump to fore"            . jump-forward-center)
+  (kbd "C-s")    '("save buffer"                . save-buffer)
+  (kbd "s")      '("sneak"                      . my-ace-sneak)
+  (kbd "C-j")    '("jump to below"              . sp-next-sexp)
+  (kbd "C-k")    '("jump to above"              . backward-up-list)
+  (kbd "C-B")    '("replace word"               . moon/query-replace-point)
+  (kbd "C-L")    '("multi next"                 . evil-multiedit-match-and-next)
+  (kbd "C-S-L")  '("multi all"                  . evil-multiedit-match-all)
+  (kbd "M-L")    '("smart enlarge"              . er/expand-region)
+  (kbd "M-e")    '("embark"                     . embark-act)
+  (kbd "M-n")    '("consult notes"              . consult-notes)
+  ;; (kbd "M-p")    '("paste previous"          . evil-paste-pop) ;; this is replaced by C-p
+  (kbd "M-b")    '("buffers"                    . +vertico/switch-workspace-buffer)
+  (kbd "M-H")    '("smart shrink"               . er/contract-region)
+  (kbd "M-w")    '("alt workspace"              . +workspace/switch-to)
+  (kbd "SPC fn") '("yank file name"             . my-yank-file-name)
+  (kbd "SPC e")  '("dirvish side"               . dirvish-side)
+  (kbd "<f8>")   '("next error"                 . next-error)
+  (kbd "C-<backspace>") '("delete without copy" . my/delete-word-backward))
+
+(global-unset-key (kbd "C-;"))
 
 (map! :leader
        :desc "join line      " "j" #'evil-join
@@ -129,10 +144,15 @@
   "K"   'evil-last-non-blank
   "-"   'evilnc-comment-or-uncomment-lines)
 
+(after! info
+  (evil-define-key 'normal Info-mode-map
+    "J"   'back-to-indentation
+    "K"   'evil-last-non-blank))
+
 (evil-define-key 'insert 'global
   (kbd "C-SPC")  '("complete filename" . comint-dynamic-complete-filename)
   (kbd "M-e")    '("embark"            . embark-act)
-  (kbd "C-o")    '("delete word"       . doom/delete-backward-word)
+  (kbd "C-o")    '("delete word"       . my/delete-word-backward)
   (kbd "M-y")    '("yasnippet expand"  . yas-expand) ;
   (kbd "C-s")    '("save buffer"       . save-buffer)
   (kbd "C-S-V")  '("paste"             . evil-paste-after))
@@ -163,31 +183,35 @@
       (:prefix ("d" . "dired")
        :desc "open dired in current file" "d" #'dired-jump
        :desc "jump history" "j" #'dirvish-history-jump))
-(evil-define-key 'normal dired-mode-map
-  "h"         'dired-up-directory
-  "l"         'dired-find-file
-  "-"         `dired-do-kill-lines
-  "w"         `dirvish-layout-toggle
-  "r"         `revert-buffer
-  "R"         `wdired-change-to-wdired-mode
-  "X"         `dired-do-rename
-  "o"         `dirvish-quick-access
-  "i"         `dirvish-file-info-menu
-  "y"         `dirvish-yank-menu
-  "f"         `dirvish-narrow
-  ","         `dirvish-quicksort
-  "."         `dired-omit-mode
-  (kbd "s")   `dirvish-fd
-  (kbd "TAB") `other-window
-  (kbd "M-l") `dirvish-ls-switches-menu
-  (kbd "M-m") `dirvish-mark-menu
-  (kbd "M-t") `dirvish-layout-toggle
-  (kbd "M-s") `dirvish-setup-menu
-  (kbd "M-e") `dirvish-emerge-menu
-  (kbd "M-j") `dirvish-fd-jump
-  (kbd "TAB") `dirvish-toggle-subtree)
+(after! dired
+  (evil-define-key 'normal dired-mode-map
+    "h"         'dired-up-directory
+    "l"         'dired-find-file
+    "-"         `dired-do-kill-lines
+    "w"         `dirvish-layout-toggle
+    "r"         `revert-buffer
+    "R"         `wdired-change-to-wdired-mode
+    "X"         `dired-do-rename
+    "o"         `dirvish-quick-access
+    "i"         `dirvish-file-info-menu
+    "y"         `dirvish-yank-menu
+    "f"         `dirvish-narrow
+    ","         `dirvish-quicksort
+    "."         `dired-omit-mode
+    (kbd "s")   `dirvish-fd
+    (kbd "TAB") `other-window
+    (kbd "M-l") `dirvish-ls-switches-menu
+    (kbd "M-m") `dirvish-mark-menu
+    (kbd "M-t") `dirvish-layout-toggle
+    (kbd "M-s") `dirvish-setup-menu
+    (kbd "M-e") `dirvish-emerge-menu
+    (kbd "M-j") `dirvish-fd-jump
+    (kbd "TAB") `dirvish-toggle-subtree))
 
 ; haskell repl(lol) mode
+(evil-define-key 'normal haskell-mode-map
+  (kbd "gk")     '("check info" . haskell-process-do-info)
+  (kbd "SPC lc") '("load the repl" . haskell-process-load-file))
 (evil-define-key 'insert haskell-lol-mode-map
   (kbd "C-l")   `haskell-interactive-mode-clear
   (kbd "<up>")  `haskell-interactive-mode-history-previous
@@ -204,10 +228,6 @@
   (kbd "k")  (lambda() (interactive) (pdf-view-previous-line-or-previous-page 2))
   (kbd "d")  (lambda() (interactive) (pdf-view-next-line-or-next-page 8))
   (kbd "u")  (lambda() (interactive) (pdf-view-previous-line-or-previous-page 8)))
-
-(evil-define-key 'normal haskell-mode-map
-  (kbd "gk")     '("check info" . haskell-process-do-info)
-  (kbd "SPC lc") '("load the repl" . haskell-process-load-file))
 
 (evil-define-key 'normal vterm-mode-map
   (kbd "M-m w")  '("new frame" . make-frame-command))
@@ -233,6 +253,7 @@
  ("i" . ibuffer)
  ("w" . make-frame-command)
  ("t" . todo-show)
+ ("e" . eval-defun)
  ("r" . revert-buffer-fine-no-confirm))
 
 

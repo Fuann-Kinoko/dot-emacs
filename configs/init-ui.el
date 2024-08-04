@@ -42,7 +42,7 @@
 ;; make rust cargo run window takes half screen
 
 (after! ace-window
-  (setq aw-char-position 'left)
+  (setq aw-char-position 'top-left)
   (set-face-attribute 'aw-leading-char-face nil
                       :height 2.0))
 ;; change the size and the font of indicator triggered by ace-window(C-w C-w)
@@ -56,9 +56,19 @@
 (setq compilation-skip-threshold 2)
 ;; automatically scroll compilation, if no error
 
-(setq global-hl-line-modes nil)
-;; disable background highlight for current line
-;; so that i can use flatwhite theme correctly
+(defun adjust-global-hl-line-mode-based-on-theme ()
+  "Adjust `global-hl-line-mode` based on the loaded THEME."
+  (let ((theme doom-theme))
+    (if (eq theme 'doom-flatwhite)
+        (progn (setq global-hl-line-modes nil)
+         (global-hl-line-mode -1))
+        (progn (setq global-hl-line-modes '(prog-mode text-mode conf-mode special-mode org-agenda-mode dired-mode))
+         (global-hl-line-mode 1)))))
+;; (setq global-hl-line-modes nil)
+(add-hook 'after-init-hook 'adjust-global-hl-line-mode-based-on-theme)
+(add-hook 'doom-load-theme-hook 'adjust-global-hl-line-mode-based-on-theme)
+;; disable background highlight for current line specifally in flatwhite theme
+;; so that i can use this theme correctly
 
 (modify-all-frames-parameters
 '((right-divider-width . 10)
@@ -92,6 +102,7 @@
   (mode-line ((t (:height 0.85))))
   (mode-line-inactive ((t (:height 0.85))))
   :custom
+  (doom-modeline-window-width-limit nil) ;; i have no idea what does that mean, but it fixes the wrong display of right align items
   (doom-modeline-height 15)
   (doom-modeline-bar-width 6)
   (doom-modeline-lsp t)
@@ -104,4 +115,6 @@
   (doom-modeline-major-mode-icon nil))
 ;; doom modeline customes
 
+(global-subword-mode 1)
+;; treat CamelCase as a splitted words just like snake_case
 (provide 'init-ui)
