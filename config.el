@@ -26,5 +26,9 @@
 ; misc utils
 (add-to-list 'load-path "~/.config/doom/utils")
 (require 'my-dash-board)
-(require 'kdlang-mode)
 ;; (require 'my-exwm)
+
+; custom modes
+(add-to-list 'load-path "~/.config/doom/modes")
+(require 'kdlang-mode)
+(require 'kdl-ts-mode)

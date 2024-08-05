@@ -86,6 +86,96 @@
      (forward-word (- arg))
      (point))))
 
+(defun my/switch-workspace-buffer-state-preview ()
+  "copy from '+vertico--workspace-buffer-state'"
+  (let ((preview
+         ;; Only preview in current window and other window.
+         ;; Preview in frames and tabs is not possible since these don't get cleaned up.
+         (if (memq consult--buffer-display
+                   '(switch-to-buffer switch-to-buffer-other-window))
+             (let ((orig-buf (current-buffer))
+                   other-win
+                   cleanup-buffers)
+               (lambda (action cand)
+                 (when (eq action 'preview)
+                   (when (and (eq consult--buffer-display #'switch-to-buffer-other-window)
+                              (not other-win))
+                     (switch-to-buffer-other-window orig-buf)
+                     (setq other-win (selected-window)))
+                   (let ((win (or other-win (selected-window))))
+                     (when (window-live-p win)
+                       (with-selected-window win
+                         (cond
+                          ((and cand (get-buffer cand))
+                           (unless (+workspace-contains-buffer-p cand)
+                             (cl-pushnew cand cleanup-buffers))
+                           (switch-to-buffer cand 'norecord))
+                          ((buffer-live-p orig-buf)
+                           (switch-to-buffer orig-buf 'norecord)
+                           (mapc #'persp-remove-buffer cleanup-buffers)))))))))
+           #'ignore)))
+    (lambda (action cand)
+      (funcall preview action cand))))
+(defun my/switch-workspace-buffer-with-extra-predicate (extra-predicate)
+  "the arg 'extra-predicate' is to filter the buffer list in it
+   it is describe as a lambda function containing arg 'buf'
+   please refer to
+   '+vertico--workspace-generate-sources' and
+   '+vertico/switch-workspace-buffer'
+   for more information.
+  "
+  (interactive)
+  (require 'consult)
+  (when-let
+      (buffer
+       (consult--multi
+        (let* ((active-workspace (+workspace-current-name))
+               (workspaces (+workspace-list-names))
+               (key-range (append (cl-loop for i from ?1 to ?9 collect i)
+                                  (cl-loop for i from ?a to ?z collect i)
+                                  (cl-loop for i from ?A to ?Z collect i)))
+               (last-i (length workspaces))
+               (i 0))
+          (mapcar (lambda (name)
+                    (cl-incf i)
+                    `(:name     ,name
+                      :hidden   ,(not (string= active-workspace name))
+                      :narrow   ,(nth (1- i) key-range)
+                      :category buffer
+                      :state    my/switch-workspace-buffer-state-preview
+                      :items    ,(lambda ()
+                                   (consult--buffer-query
+                                    :sort 'visibility
+                                    :as #'buffer-name
+                                    :predicate
+                                    (lambda (buf)
+                                      (when-let (workspace (+workspace-get name t))
+                                        (and (+workspace-contains-buffer-p buf workspace)
+                                             (funcall extra-predicate buf)
+                                             )))))))
+                  (+workspace-list-names)))
+        :require-match
+        (confirm-nonexistent-file-or-buffer)
+        :prompt (format "Switch to buffer (%s): "
+                        (+workspace-current-name))
+        :history 'consult--buffer-history
+        :sort nil))
+    (if-let (window (get-buffer-window (car buffer)))
+        (select-window window)
+      (funcall consult--buffer-display (car buffer)))))
+(defun my/switch-workspace-buffer-no-dired ()
+  (interactive)
+  (my/switch-workspace-buffer-with-extra-predicate
+   (lambda (buf)
+     (not (eq (buffer-local-value 'major-mode (get-buffer buf))
+                                                      'dired-mode)))))
+(defun my/switch-workspace-buffer-only-dired ()
+  (interactive)
+  (my/switch-workspace-buffer-with-extra-predicate
+   (lambda (buf)
+     (eq (buffer-local-value 'major-mode (get-buffer buf))
+                                                      'dired-mode))))
+
 ; ================== bindings ==================
 ;
 (general-evil-setup)
@@ -122,7 +212,8 @@
   (kbd "M-e")    '("embark"                     . embark-act)
   (kbd "M-n")    '("consult notes"              . consult-notes)
   ;; (kbd "M-p")    '("paste previous"          . evil-paste-pop) ;; this is replaced by C-p
-  (kbd "M-b")    '("buffers"                    . +vertico/switch-workspace-buffer)
+  (kbd "M-b")    '("buffers"                    . my/switch-workspace-buffer-no-dired)
+  (kbd "M-d")    '("direds"                     . my/switch-workspace-buffer-only-dired)
   (kbd "M-H")    '("smart shrink"               . er/contract-region)
   (kbd "M-w")    '("alt workspace"              . +workspace/switch-to)
   (kbd "SPC fn") '("yank file name"             . my-yank-file-name)
@@ -134,7 +225,7 @@
 
 (map! :leader
        :desc "join line      " "j" #'evil-join
-       :desc "buffer-vertico " "," #'+vertico/switch-workspace-buffer)
+       :desc "buffer-vertico " "," #'my/switch-workspace-buffer-no-dired)
 
 (evil-define-key 'visual 'global
   (kbd "C-L")    '("multi next"     . evil-multiedit-match-and-next)
