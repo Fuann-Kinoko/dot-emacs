@@ -65,7 +65,7 @@
   (revert-buffer-with-fine-grain nil t))
 
 (defun repeat-last-complex-command ()
-  "basically repeat-complex-command but without confirm"
+  "Basically 'repeat-complex-command' but without confirm."
   (lol)
   (repeat-complex-command 1))
 
@@ -78,7 +78,7 @@
 ;; delete not kill it into kill-ring
 ;; _based on_ http://ergoemacs.org/emacs/emacs_kill-ring.html
 (defun my/delete-word-backward (arg)
-  "delete backward, not triggering `kill-ring'."
+  "Delete backward, not triggering `kill-ring', dont bother with 'arg' tho."
   (interactive "p")
   (delete-region
    (point)
@@ -87,7 +87,7 @@
      (point))))
 
 (defun my/switch-workspace-buffer-state-preview ()
-  "copy from '+vertico--workspace-buffer-state'"
+  "Copy from '+vertico--workspace-buffer-state'."
   (let ((preview
          ;; Only preview in current window and other window.
          ;; Preview in frames and tabs is not possible since these don't get cleaned up.
@@ -124,7 +124,6 @@
    '+vertico/switch-workspace-buffer'
    for more information.
   "
-  (interactive)
   (require 'consult)
   (when-let
       (buffer
