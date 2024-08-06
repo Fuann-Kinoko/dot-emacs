@@ -10,7 +10,7 @@
   :config
   (after! doom-ui
     ;; set your favorite themes
-    (setq! auto-dark-dark-theme 'doom-gruvbox-material
+    (setq! auto-dark-dark-theme 'my-mountain
           auto-dark-light-theme 'doom-flatwhite)
     (auto-dark-mode 1)
     (add-hook 'auto-dark-dark-mode-hook

@@ -42,7 +42,7 @@ Can be an integer to determine the exact padding."
    ;; bg and base8 is a starker fg. For example, if bg is light grey and fg is
    ;; dark grey, base0 should be white and base8 should be black.
    (base0      '("#191919" "#191919"       "black"        ))
-   (base1      '("#262626" "#262626"     "brightblack"  ))
+   (base1      '("#333130" "#333130"     "brightblack"  ))
    (base2      '("#393939" "#393939"     "brightblack"  ))
    (base3      '("#4c4c4c" "#4c4c4c"     "brightblack"  ))
    (base4      '("#767676" "#767676"     "brightblack"  ))
@@ -78,7 +78,7 @@ Can be an integer to determine the exact padding."
    (keywords       magenta)
    (methods        blue)
    (operators      fg)
-   (type           yellow)
+   (type           dark-cyan)
    (strings        green)
    (variables      fg)
    (numbers        orange)
