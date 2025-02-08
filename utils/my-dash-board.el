@@ -84,13 +84,34 @@
    "~/.doom.d/banner3_inv.pbm"
    ))
 
+(defun my/doom-display-benchmark-h (&optional return-p)
+  "My custom version: doom logo removed."
+  (funcall (if return-p #'format #'message)
+           "loaded %d packages across %d modules in %.03fs"
+           (- (length load-path) (length (get 'load-path 'initial-value)))
+           (hash-table-count doom-modules)
+           doom-init-time))
+(defun my/doom-dashboard-widget-loaded ()
+  "My custom version: change the prefix \n\n to \n"
+  (when doom-init-time
+    (insert
+     "\n"
+     (propertize
+      (+doom-dashboard--center
+       +doom-dashboard--width
+       (my/doom-display-benchmark-h 'return))
+      'face 'doom-dashboard-loaded)
+     "\n")))
+
 (setq +doom-dashboard-functions `(custom-dashboard-widget-space-seperator
                                   doom-dashboard-widget-banner
                                   custom-dashboard-widget-dash-seperator
                                   custom-dashboard-widget-recent-file
-                                  doom-dashboard-widget-loaded))
+                                  ;; doom-dashboard-widget-loaded
+                                  my/doom-dashboard-widget-loaded))
 
 (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
 (add-hook! '+doom-dashboard-mode-hook (hide-mode-line-mode 1) (hl-line-mode -1))
+(add-hook! '+doom-dashboard-functions (hide-mode-line-mode 1))
 
 (provide 'my-dash-board)

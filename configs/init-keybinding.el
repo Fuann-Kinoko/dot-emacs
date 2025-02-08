@@ -10,7 +10,9 @@
 ;; Embark settings
 (setq embark-quit-after-action '((kill-buffer . nil) (t . t)))
 (map! :map 'minibuffer-mode-map
-  "M-e"    #'embark-act)
+  "M-e"    #'embark-act
+  "C-o"    #'my/delete-word-backward
+  "C-<backspace>" #'my/delete-word-backward)
 
 ;; remap yes or no -> or or no :)
 (define-key y-or-n-p-map      "o" 'act)
@@ -63,7 +65,7 @@
   (revert-buffer-with-fine-grain nil t))
 
 (defun repeat-last-complex-command ()
-  "basically repeat-complex-command but without confirm"
+  "Basically 'repeat-complex-command' but without confirm."
   (lol)
   (repeat-complex-command 1))
 
@@ -79,10 +81,118 @@
  (save-buffers-kill-emacs))
     ;;close a child frame
     (delete-frame (selected-frame))))
+
+(defun reload-current-dired-buffer ()
+  "Reload current `dired-mode' buffer."
+  (let* ((dir (dired-current-directory)))
+    (progn (kill-buffer (current-buffer))
+           (dired dir))))
+
+;; delete not kill it into kill-ring
+;; _based on_ http://ergoemacs.org/emacs/emacs_kill-ring.html
+(defun my/delete-word-backward (arg)
+  "Delete backward, not triggering `kill-ring', dont bother with 'arg' tho."
+  (interactive "p")
+  (delete-region
+   (point)
+   (progn
+     (forward-word (- arg))
+     (point))))
+
+(defun my/switch-workspace-buffer-state-preview ()
+  "Copy from '+vertico--workspace-buffer-state'."
+  (let ((preview
+         ;; Only preview in current window and other window.
+         ;; Preview in frames and tabs is not possible since these don't get cleaned up.
+         (if (memq consult--buffer-display
+                   '(switch-to-buffer switch-to-buffer-other-window))
+             (let ((orig-buf (current-buffer))
+                   other-win
+                   cleanup-buffers)
+               (lambda (action cand)
+                 (when (eq action 'preview)
+                   (when (and (eq consult--buffer-display #'switch-to-buffer-other-window)
+                              (not other-win))
+                     (switch-to-buffer-other-window orig-buf)
+                     (setq other-win (selected-window)))
+                   (let ((win (or other-win (selected-window))))
+                     (when (window-live-p win)
+                       (with-selected-window win
+                         (cond
+                          ((and cand (get-buffer cand))
+                           (unless (+workspace-contains-buffer-p cand)
+                             (cl-pushnew cand cleanup-buffers))
+                           (switch-to-buffer cand 'norecord))
+                          ((buffer-live-p orig-buf)
+                           (switch-to-buffer orig-buf 'norecord)
+                           (mapc #'persp-remove-buffer cleanup-buffers)))))))))
+           #'ignore)))
+    (lambda (action cand)
+      (funcall preview action cand))))
+(defun my/switch-workspace-buffer-with-extra-predicate (extra-predicate)
+  "the arg 'extra-predicate' is to filter the buffer list in it
+   it is describe as a lambda function containing arg 'buf'
+   please refer to
+   '+vertico--workspace-generate-sources' and
+   '+vertico/switch-workspace-buffer'
+   for more information.
+  "
+  (require 'consult)
+  (when-let
+      (buffer
+       (consult--multi
+        (let* ((active-workspace (+workspace-current-name))
+               (workspaces (+workspace-list-names))
+               (key-range (append (cl-loop for i from ?1 to ?9 collect i)
+                                  (cl-loop for i from ?a to ?z collect i)
+                                  (cl-loop for i from ?A to ?Z collect i)))
+               (last-i (length workspaces))
+               (i 0))
+          (mapcar (lambda (name)
+                    (cl-incf i)
+                    `(:name     ,name
+                      :hidden   ,(not (string= active-workspace name))
+                      :narrow   ,(nth (1- i) key-range)
+                      :category buffer
+                      :state    my/switch-workspace-buffer-state-preview
+                      :items    ,(lambda ()
+                                   (consult--buffer-query
+                                    :sort 'visibility
+                                    :as #'buffer-name
+                                    :predicate
+                                    (lambda (buf)
+                                      (when-let (workspace (+workspace-get name t))
+                                        (and (+workspace-contains-buffer-p buf workspace)
+                                             (funcall extra-predicate buf)
+                                             )))))))
+                  (+workspace-list-names)))
+        :require-match
+        (confirm-nonexistent-file-or-buffer)
+        :prompt (format "Switch to buffer (%s): "
+                        (+workspace-current-name))
+        :history 'consult--buffer-history
+        :sort nil))
+    (if-let (window (get-buffer-window (car buffer)))
+        (select-window window)
+      (funcall consult--buffer-display (car buffer)))))
+(defun my/switch-workspace-buffer-no-dired ()
+  (interactive)
+  (my/switch-workspace-buffer-with-extra-predicate
+   (lambda (buf)
+     (not (eq (buffer-local-value 'major-mode (get-buffer buf))
+                                                      'dired-mode)))))
+(defun my/switch-workspace-buffer-only-dired ()
+  (interactive)
+  (my/switch-workspace-buffer-with-extra-predicate
+   (lambda (buf)
+     (eq (buffer-local-value 'major-mode (get-buffer buf))
+                                                      'dired-mode))))
+
 ; ================== bindings ==================
 ;
 (general-evil-setup)
-(global-set-key [escape] 'keyboard-quit)
+;; (global-set-key [escape] 'keyboard-quit)
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (setq avy-timeout-seconds 0.2)
 
 ;; normal keybindings:
@@ -103,18 +213,23 @@
   (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
   (kbd "M-L")    '("smart enlarge"  . er/expand-region)
   (kbd "M-e")    '("embark"         . embark-act)
+  (kbd "M-n")    '("consult notes"              . consult-notes)
   ;; (kbd "M-p")    '("paste previous" . evil-paste-pop) ;; this is replaced by C-p
-  (kbd "M-b")    '("buffers"        . +vertico/switch-workspace-buffer)
+  (kbd "M-b")    '("buffers"                    . my/switch-workspace-buffer-no-dired)
+  (kbd "M-d")    '("direds"                     . my/switch-workspace-buffer-only-dired)
   (kbd "M-H")    '("smart shrink"   . er/contract-region)
   (kbd "M-w")    '("alt workspace"  . +workspace/switch-to)
   (kbd "SPC fn") '("yank file name" . my-yank-file-name)
   (kbd "SPC e")  '("dirvish side"   . dirvish-side)
   (kbd "M-<f4>") '("dirvish side"   . intelligent-close)
-  (kbd "<f8>")   '("next error"     . next-error))
+  (kbd "<f8>")   '("next error"     . next-error)
+  (kbd "C-<backspace>") '("delete without copy" . my/delete-word-backward))
+
+(global-unset-key (kbd "C-;"))
 
 (map! :leader
        :desc "join line      " "j" #'evil-join
-       :desc "buffer-vertico " "," #'+vertico/switch-workspace-buffer)
+       :desc "buffer-vertico " "," #'my/switch-workspace-buffer-no-dired)
 
 (evil-define-key 'visual 'global
   (kbd "C-L")    '("multi next"     . evil-multiedit-match-and-next)
@@ -124,10 +239,17 @@
   "K"   'evil-last-non-blank
   "-"   'evilnc-comment-or-uncomment-lines)
 
+(after! info
+  (evil-define-key 'normal Info-mode-map
+    "J"   'back-to-indentation
+    "K"   'evil-last-non-blank))
+
 (evil-define-key 'insert 'global
   (kbd "C-SPC")  '("complete filename" . comint-dynamic-complete-filename)
   (kbd "M-e")    '("embark"            . embark-act)
+  (kbd "C-o")    '("delete word"       . my/delete-word-backward)
   (kbd "M-y")    '("yasnippet expand"  . yas-expand)
+  (kbd "C-s")    '("save buffer"       . save-buffer)
   (kbd "C-S-V")  '("paste"             . evil-paste-after))
 
 ;; (general-nmap "RET" (general-simulate-key "cio"))
@@ -154,29 +276,37 @@
 ;; dired keybindings:
 (map! :leader
       (:prefix ("d" . "dired")
-       :desc "open dired in current file" "d" #'dirvish
+       :desc "open dired in current file" "d" #'dired-jump
        :desc "jump history" "j" #'dirvish-history-jump))
-(evil-define-key 'normal dired-mode-map
-  "h"         'dired-up-directory
-  "l"         'dired-find-file
-  "-"         `dired-do-kill-lines
-  "w"         `dirvish-layout-toggle
-  "o"         `dirvish-quick-access
-  "i"         `dirvish-file-info-menu
-  "y"         `dirvish-yank-menu
-  "f"         `dirvish-narrow
-  ","         `dirvish-quicksort
-  (kbd "s")   `dirvish-fd
-  (kbd "TAB") `other-window
-  (kbd "M-l") `dirvish-ls-switches-menu
-  (kbd "M-m") `dirvish-mark-menu
-  (kbd "M-t") `dirvish-layout-toggle
-  (kbd "M-s") `dirvish-setup-menu
-  (kbd "M-e") `dirvish-emerge-menu
-  (kbd "M-j") `dirvish-fd-jump
-  (kbd "TAB") `dirvish-toggle-subtree)
+(after! dired
+  (evil-define-key 'normal dired-mode-map
+    "h"         'dired-up-directory
+    "l"         'dired-find-file
+    "-"         `dired-do-kill-lines
+    "w"         `dirvish-layout-toggle
+    "r"         `revert-buffer
+    "R"         `wdired-change-to-wdired-mode
+    "X"         `dired-do-rename
+    "o"         `dirvish-quick-access
+    "i"         `dirvish-file-info-menu
+    "y"         `dirvish-yank-menu
+    "f"         `dirvish-narrow
+    ","         `dirvish-quicksort
+    "."         `dired-omit-mode
+    (kbd "s")   `dirvish-fd
+    (kbd "TAB") `other-window
+    (kbd "M-l") `dirvish-ls-switches-menu
+    (kbd "M-m") `dirvish-mark-menu
+    (kbd "M-t") `dirvish-layout-toggle
+    (kbd "M-s") `dirvish-setup-menu
+    (kbd "M-e") `dirvish-emerge-menu
+    (kbd "M-j") `dirvish-fd-jump
+    (kbd "TAB") `dirvish-toggle-subtree))
 
 ; haskell repl(lol) mode
+(evil-define-key 'normal haskell-mode-map
+  (kbd "gk")     '("check info" . haskell-process-do-info)
+  (kbd "SPC lc") '("load the repl" . haskell-process-load-file))
 (evil-define-key 'insert haskell-lol-mode-map
   (kbd "C-l")   `haskell-interactive-mode-clear
   (kbd "<up>")  `haskell-interactive-mode-history-previous
@@ -193,10 +323,6 @@
   (kbd "k")  (lambda() (interactive) (pdf-view-previous-line-or-previous-page 2))
   (kbd "d")  (lambda() (interactive) (pdf-view-next-line-or-next-page 8))
   (kbd "u")  (lambda() (interactive) (pdf-view-previous-line-or-previous-page 8)))
-
-(evil-define-key 'normal haskell-mode-map
-  (kbd "gk")     '("check info" . haskell-process-do-info)
-  (kbd "SPC lc") '("load the repl" . haskell-process-load-file))
 
 (evil-define-key 'normal vterm-mode-map
   (kbd "M-m w")  '("new frame" . make-frame-command))
@@ -222,6 +348,7 @@
  ("i" . ibuffer)
  ("w" . make-frame-command)
  ("t" . todo-show)
+ ("e" . eval-defun)
  ("r" . revert-buffer-fine-no-confirm))
 
 

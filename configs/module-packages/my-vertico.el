@@ -24,6 +24,8 @@
           (consult-imenu (:not posframe) buffer indexed)
           (execute-extended-command indexed)
           (+vertico/switch-workspace-buffer (:not posframe) buffer)
+          (my/switch-workspace-buffer-no-dired (:not posframe) flat)
+          (my/switch-workspace-buffer-only-dired (:not posframe) flat)
           ;; (query-replace flat)
           (+lookup/references (:not posframe) buffer)
           (moon/query-replace-region (:not posframe) flat)
@@ -38,6 +40,12 @@
         (alpha . 50)))
   (advice-add #'vertico--format-candidate :filter-args #'my/vertico-truncate-candidates)
 )
+
+(use-package! orderless
+  :custom
+  ;; enable flex to fuzzy matching, partically to better select buffer for me
+  (orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp))
+  )
 
   ;; (setq vertico-multiform-categories
   ;;       '((file grid))))

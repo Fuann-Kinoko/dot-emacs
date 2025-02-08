@@ -39,8 +39,9 @@
 (package! evil-escape :disable t)
 (package! posframe)
 (package! fcitx)
-(package! better-jumper)
+;; (package! better-jumper)
 (package! visual-regexp)
+(package! auto-dim-other-buffers)
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;; (package! some-package)
@@ -54,6 +55,8 @@
 (package! vertico-posframe)
 (package! pangu-spacing)
 
+(package! denote)
+(package! consult-notes)
 (package! org-download)
 (package! org-ros)
 (package! org-appear)
@@ -67,9 +70,9 @@
 (package! olivetti)
 
 (package! citre)
-(package! calibredb)
+;; (package! calibredb)
+;; (package! ox-hugo)
 
-(package! solo-jazz-theme)
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
 ;; https://github.com/radian-software/straight.el#the-recipe-format

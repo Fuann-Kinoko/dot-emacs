@@ -14,6 +14,8 @@
      (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
      (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
      (rust "https://github.com/tree-sitter/tree-sitter-rust")
-     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")
+     (kdl "https://github.com/tree-sitter-grammars/tree-sitter-kdl")))
+
 
 (provide 'my-treesitter)

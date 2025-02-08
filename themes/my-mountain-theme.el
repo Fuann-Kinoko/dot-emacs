@@ -1,4 +1,4 @@
-;;; doom-mountain.el --- Mountain Theme for emacs -*- lexical-binding: t; no-byte-compile: t; -*-
+;;; my-mountain.el --- Mountain Theme for emacs -*- lexical-binding: t; no-byte-compile: t; -*-
 ;;
 ;;; Commentary:
 ;;
@@ -11,20 +11,20 @@
 ;;
 ;;; Variables
 
-(defgroup doom-mountain-theme nil
-  "Options for the `doom-mountain' theme."
+(defgroup my-mountain-theme nil
+  "Options for the `my-mountain' theme."
   :group 'doom-themes)
 
-(defcustom doom-mountain-padded-modeline doom-themes-padded-modeline
+(defcustom my-mountain-padded-modeline doom-themes-padded-modeline
   "If non-nil, adds a 4px padding to the mode-line.
 Can be an integer to determine the exact padding."
-  :group 'doom-mountain-theme
+  :group 'my-mountain-theme
   :type '(choice integer boolean))
 
 ;;
 ;;; Theme definition
 
-(def-doom-theme doom-mountain
+(def-doom-theme my-mountain
   "Mountain Theme for Emacs"
 
   ;; name        default   256           16
@@ -42,7 +42,7 @@ Can be an integer to determine the exact padding."
    ;; bg and base8 is a starker fg. For example, if bg is light grey and fg is
    ;; dark grey, base0 should be white and base8 should be black.
    (base0      '("#191919" "#191919"       "black"        ))
-   (base1      '("#262626" "#262626"     "brightblack"  ))
+   (base1      '("#333130" "#333130"     "brightblack"  ))
    (base2      '("#393939" "#393939"     "brightblack"  ))
    (base3      '("#4c4c4c" "#4c4c4c"     "brightblack"  ))
    (base4      '("#767676" "#767676"     "brightblack"  ))
@@ -78,7 +78,7 @@ Can be an integer to determine the exact padding."
    (keywords       magenta)
    (methods        blue)
    (operators      fg)
-   (type           yellow)
+   (type           dark-cyan)
    (strings        green)
    (variables      fg)
    (numbers        orange)
@@ -107,9 +107,9 @@ Can be an integer to determine the exact padding."
    (modeline-fg     fg)
    (modeline-fg-alt base4)
    (-modeline-pad
-	(when doom-mountain-padded-modeline
-	  (if (integerp doom-mountain-padded-modeline)
-		  doom-mountain-padded-modeline
+	(when my-mountain-padded-modeline
+	  (if (integerp my-mountain-padded-modeline)
+		  my-mountain-padded-modeline
 		4))))
 
   ;; --- faces ------------------------------
@@ -143,7 +143,7 @@ Can be an integer to determine the exact padding."
    (vterm-color-magenta :foreground magenta :background violet)
    (vterm-color-white :foreground "#e7e7e7" :background "#f5f5f5")
 
-   ;; org-mode								
+   ;; org-mode
    ;; ((outline-1 &override) :foreground level1)
    ;; (outline-2 :inherit 'outline-1 :foreground level2)
    ;; (outline-3 :inherit 'outline-1 :foreground level3)
@@ -186,12 +186,23 @@ Can be an integer to determine the exact padding."
    (highlight-quoted-symbol :foreground dark-cyan)
    (highlight-quoted-quote  :foreground magenta)
 
+   ;; magit ediff
+   (ediff-current-diff-A
+                                :background (doom-darken red 0.5))
+   (ediff-current-diff-B
+                                :background (doom-darken green 0.5))
+   (ediff-current-diff-C
+                                :background (doom-darken blue 0.8))
+   (ediff-current-diff-Ancestor
+                                :background (doom-darken teal 0.8))
+
    ;;;; doom-modeline
    (doom-modeline-buffer-path       :foreground violet :bold bold)
-   (doom-modeline-buffer-major-mode :inherit 'doom-modeline-buffer-path))
+   (doom-modeline-buffer-major-mode :inherit 'doom-modeline-buffer-path)
+   )
 
   ;; --- variables --------------------------
   ;; ()
   )
 
-;;; doom-mountain.el ends here
+;;; my-mountain.el ends here
