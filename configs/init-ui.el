@@ -120,6 +120,6 @@
   (doom-modeline-major-mode-icon nil))
 ;; doom modeline customes
 
-(global-subword-mode 1)
+;; (global-subword-mode 1)
 ;; treat CamelCase as a splitted words just like snake_case
 (provide 'init-ui)

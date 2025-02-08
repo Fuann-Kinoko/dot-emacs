@@ -1,4 +1,8 @@
 ;;; utils/my-exwm.el -*- lexical-binding: t; -*-
+
+;; Be aware: pgtk compiled emacs doesn't support exwm,
+;; switch to x compatiable one to use this package
+
 ;; Disable menu-bar, tool-bar and scroll-bar to increase the usable space.
 (menu-bar-mode -1)
 (tool-bar-mode -1)

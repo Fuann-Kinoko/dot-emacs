@@ -39,7 +39,8 @@
 (package! evil-escape :disable t)
 (package! posframe)
 (package! fcitx)
-(package! better-jumper)
+;; (package! better-jumper)
+;; (package! dogears)
 (package! visual-regexp)
 (package! auto-dim-other-buffers)
 
@@ -72,6 +73,8 @@
 
 (package! citre)
 ;; (package! calibredb)
+
+;; (package! ox-hugo)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

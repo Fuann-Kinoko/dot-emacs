@@ -15,7 +15,7 @@
   :config
   (setq dired-do-revert-buffer t) ;; refresh buffer automatically after do commands
   (setq dired-listing-switches "-ahl -v --group-directories-first --almost-all")
-  (setq dirvish-attributes '(vc-state collapse file-size file-time))
+  (setq dirvish-attributes '(nerd-icons vc-state collapse file-size file-time))
   (setq dirvish-default-layout '(1 0.11 0.55))
   (setq dirvish-side-auto-close t)
   (setq dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|^\\.DS_Store\\'\\|^\\..*\\|^\\.project\\(?:ile\\)?\\'\\|^\\.\\(?:svn\\|git\\)\\'\\|^\\.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")

@@ -41,6 +41,12 @@
   (advice-add #'vertico--format-candidate :filter-args #'my/vertico-truncate-candidates)
 )
 
+(use-package! orderless
+  :custom
+  ;; enable flex to fuzzy matching, partically to better select buffer for me
+  (orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp))
+  )
+
   ;; (setq vertico-multiform-categories
   ;;       '((file grid))))
 

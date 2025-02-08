@@ -186,9 +186,20 @@ Can be an integer to determine the exact padding."
    (highlight-quoted-symbol :foreground dark-cyan)
    (highlight-quoted-quote  :foreground magenta)
 
+   ;; magit ediff
+   (ediff-current-diff-A
+                                :background (doom-darken red 0.5))
+   (ediff-current-diff-B
+                                :background (doom-darken green 0.5))
+   (ediff-current-diff-C
+                                :background (doom-darken blue 0.8))
+   (ediff-current-diff-Ancestor
+                                :background (doom-darken teal 0.8))
+
    ;;;; doom-modeline
    (doom-modeline-buffer-path       :foreground violet :bold bold)
-   (doom-modeline-buffer-major-mode :inherit 'doom-modeline-buffer-path))
+   (doom-modeline-buffer-major-mode :inherit 'doom-modeline-buffer-path)
+   )
 
   ;; --- variables --------------------------
   ;; ()

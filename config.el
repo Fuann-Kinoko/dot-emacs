@@ -22,6 +22,7 @@
 ;; (require 'my-calibredb)
 ;; (require 'my-better-jumper)
 (require 'my-dimmer)
+;; (use-package! ox-hugo :after ox)
 
 ; misc utils
 (add-to-list 'load-path "~/.config/doom/utils")
