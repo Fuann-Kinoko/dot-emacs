@@ -103,14 +103,14 @@
       'face 'doom-dashboard-loaded)
      "\n")))
 
-(setq +doom-dashboard-functions `(custom-dashboard-widget-space-seperator
+(setopt +doom-dashboard-functions `(custom-dashboard-widget-space-seperator
                                   doom-dashboard-widget-banner
                                   custom-dashboard-widget-dash-seperator
                                   custom-dashboard-widget-recent-file
                                   ;; doom-dashboard-widget-loaded
                                   my/doom-dashboard-widget-loaded))
 
-(setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
+;; (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
 (add-hook! '+doom-dashboard-mode-hook (hide-mode-line-mode 1) (hl-line-mode -1))
 (add-hook! '+doom-dashboard-functions (hide-mode-line-mode 1))
 

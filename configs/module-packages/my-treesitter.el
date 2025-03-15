@@ -1,4 +1,4 @@
-(setq treesit-language-source-alist
+(setopt treesit-language-source-alist
    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
      (cmake "https://github.com/uyha/tree-sitter-cmake")
      (css "https://github.com/tree-sitter/tree-sitter-css")
@@ -7,6 +7,8 @@
      (html "https://github.com/tree-sitter/tree-sitter-html")
      (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
      (json "https://github.com/tree-sitter/tree-sitter-json")
+     (c "https://github.com/tree-sitter/tree-sitter-c")
+     (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
      (make "https://github.com/alemuller/tree-sitter-make")
      (markdown "https://github.com/ikatyang/tree-sitter-markdown")
      (python "https://github.com/tree-sitter/tree-sitter-python")
@@ -17,5 +19,12 @@
      (yaml "https://github.com/ikatyang/tree-sitter-yaml")
      (kdl "https://github.com/tree-sitter-grammars/tree-sitter-kdl")))
 
+(use-package! treesit-auto
+  :custom
+  (treesit-auto-install nil)
+  :config
+  ;; (treesit-auto-add-to-auto-mode-alist 'all)
+  ;; (global-treesit-auto-mode)
+  )
 
 (provide 'my-treesitter)

@@ -8,10 +8,11 @@
 ;; (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
 ;; Embark settings
-(setq embark-quit-after-action '((kill-buffer . nil) (t . t)))
+(setopt embark-quit-after-action nil)
 (map! :map 'minibuffer-mode-map
-  "M-e"    #'embark-act
-  "C-o"    #'my/delete-word-backward
+  "M-e"           #'embark-act
+  "C-o"           #'my/delete-word-backward
+  "C-w"           #'my/delete-word-backward
   "C-<backspace>" #'my/delete-word-backward)
 
 ;; remap yes or no -> or or no :)
@@ -20,11 +21,11 @@
 
 ; ================== custom functions ==================
 
-(defun my-ace-sneak ()
-  "Simulate gs SPC for sneak-like cursor jump."
-  (interactive)
-  (let ((current-prefix-arg t))
-    (evil-avy-goto-char-timer)))
+;; (defun my-ace-sneak ()
+;;   "Simulate gs SPC for sneak-like cursor jump."
+;;   (interactive)
+;;   (let ((current-prefix-arg t))
+;;     (evil-avy-goto-char-timer)))
 
 (defun my-yank-file-name ()
   "Copy and show the file name of the current buffer."
@@ -43,7 +44,7 @@
                   (region-beginning)
                   (region-end))))
         ;; (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
-        ;;         (lambda () (setq vr--regexp-string sel))))  ;;
+        ;;         (lambda () (setopt vr--regexp-string sel))))  ;;
         ;; (call-interactively 'vr/query-replace))))           ;;
   (query-replace sel
                    (completing-read (format "Replace \"%s\" to: " sel) ())
@@ -53,16 +54,17 @@
   (interactive)
   (let ((word (thing-at-point 'word t)))
         ;; (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
-        ;;         (lambda () (setq vr--regexp-string word)))) ;;
+        ;;         (lambda () (setopt vr--regexp-string word)))) ;;
         ;; (call-interactively 'vr/query-replace))))           ;;
     (query-replace word
                    (completing-read (format "Replace \"%s\" to: " word) ())
                    nil (beginning-of-line))))
 
-(defun revert-buffer-fine-no-confirm ()
+(defun revert-buffer-quick-no-confirm ()
   "revert buffer fine without confirm"
   (interactive)
-  (revert-buffer-with-fine-grain nil t))
+  ;; (revert-buffer-with-fine-grain nil t))
+  (revert-buffer t t nil))
 
 (defun repeat-last-complex-command ()
   "Basically 'repeat-complex-command' but without confirm."
@@ -187,70 +189,303 @@
    (lambda (buf)
      (eq (buffer-local-value 'major-mode (get-buffer buf))
                                                       'dired-mode))))
+(defun my-jump-matching-pair ()
+  (interactive)
+  (cond ((looking-at "\\s\(") (forward-sexp) (backward-char 1))
+        ((looking-at "\\s\)") (forward-char 1) (backward-sexp))))
+
+(defun +pixel-scroll-interpolate-up-or-down (&optional direction lines)
+  (interactive)
+  (let ((dir_p (if (eq direction 'up)
+                   0.99
+                   -0.99)))             ; sth bad will happen if it is 1.0/-1.0, the last line may be cutoff
+    (if lines
+        (pixel-scroll-precision-interpolate (* dir_p lines (pixel-line-height)))
+      (pixel-scroll-interpolate-down))))
+
+(defun my/scroll-down-half-page ()
+  "scroll down half a page while keeping the cursor centered"
+  (interactive)
+  (let ((ln (line-number-at-pos (point)))
+        (lmax (line-number-at-pos (point-max))))
+    (cond ((= ln 1) (move-to-window-line nil))
+          ((= ln lmax) (recenter (window-end)))
+          ;; (t (progn
+          ;;      (+pixel-scroll-interpolate-down
+          ;;         'down
+          ;;         (/ (window-body-height) 2)))))))
+          (t (progn
+               (move-to-window-line -1)
+               (recenter))))))
+
+(defun my/scroll-up-half-page ()
+  "scroll up half a page while keeping the cursor centered"
+  (interactive)
+  (let ((ln (line-number-at-pos (point)))
+        (lmax (line-number-at-pos (point-max))))
+    (cond ((= ln 1) nil)
+          ((= ln lmax) (move-to-window-line nil))
+          ;; (t (progn
+          ;;      (+pixel-scroll-interpolate-down
+          ;;         'up
+          ;;         (/ (window-body-height) 2)))))))
+          (t (progn
+               (move-to-window-line 0)
+               (recenter))))))
+
 
 ; ================== bindings ==================
-;
-(general-evil-setup)
-;; (global-set-key [escape] 'keyboard-quit)
+
+(after! meow
+  (setopt meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+  (meow-motion-define-key
+    '("<escape>" . ignore)
+    '("/"        . isearch-forward)
+    '(";"        . meow-reverse)
+    '(","        . meow-inner-of-thing)
+    '("."        . meow-bounds-of-thing)
+    '("["        . meow-beginning-of-thing)
+    '("]"        . meow-end-of-thing)
+    '("b"        . meow-back-word)
+    '("B"        . meow-back-symbol)
+    '("e"        . meow-next-word)
+    '("E"        . meow-next-symbol)
+    '("j"        . meow-next)
+    '("J"        . meow-next-expand)
+    '("k"        . meow-prev)
+    '("K"        . meow-prev-expand)
+    '("n"        . meow-search)
+    '("o"        . meow-block)
+    '("O"        . meow-to-block)
+    '("v"        . meow-visit)
+    '("w"        . meow-mark-word)
+    '("W"        . meow-mark-symbol)
+    '("x"        . meow-line)
+    '("X"        . meow-goto-line)
+    '("m"        . meow-join)
+    '("y"        . meow-save)
+    '("Y"        . meow-sync-grab)
+    '("z"        . meow-pop-selection)
+    '("'"        . repeat)
+    '("<escape>" . ignore)
+    )
+  (meow-leader-define-key
+    ;; SPC j/k will run the original command in MOTION state.
+    ;; '("j" . "H-j")
+    ;; '("k" . "H-k")
+    ;; Use SPC (0-9) for digit arguments.
+    '("e"        . dirvish-side)
+    '("SPC"      . projectile-find-file)
+    '("1"        . meow-digit-argument)
+    '("2"        . meow-digit-argument)
+    '("3"        . meow-digit-argument)
+    '("4"        . meow-digit-argument)
+    '("5"        . meow-digit-argument)
+    '("6"        . meow-digit-argument)
+    '("7"        . meow-digit-argument)
+    '("8"        . meow-digit-argument)
+    '("9"        . meow-digit-argument)
+    '("0"        . meow-digit-argument)
+    '("/"        . meow-keypad-describe-key)
+    '("?"        . meow-cheatsheet)
+  )
+  (meow-normal-define-key
+    '("0"        . meow-expand-0)
+    '("9"        . meow-expand-9)
+    '("8"        . meow-expand-8)
+    '("7"        . meow-expand-7)
+    '("6"        . meow-expand-6)
+    '("5"        . meow-expand-5)
+    '("4"        . meow-expand-4)
+    '("3"        . meow-expand-3)
+    '("2"        . meow-expand-2)
+    '("1"        . meow-expand-1)
+    '("/"        . isearch-forward)
+    '(";"        . meow-reverse)
+    '(","        . meow-inner-of-thing)
+    '("."        . meow-bounds-of-thing)
+    '("["        . meow-beginning-of-thing)
+    '("]"        . meow-end-of-thing)
+    '("a"        . meow-append)
+    '("A"        . meow-open-below)
+    '("b"        . meow-back-word)
+    '("B"        . meow-back-symbol)
+    '("c"        . meow-change)
+    '("d"        . meow-delete)
+    '("D"        . meow-backward-delete)
+    '("e"        . meow-next-word)
+    '("E"        . meow-next-symbol)
+    '("f"        . meow-find)
+    '("h"        . meow-left)
+    '("H"        . meow-left-expand)
+    '("i"        . meow-insert)
+    '("I"        . meow-open-above)
+    '("j"        . meow-next)
+    '("J"        . meow-next-expand)
+    '("k"        . meow-prev)
+    '("K"        . meow-prev-expand)
+    '("l"        . meow-right)
+    '("L"        . meow-right-expand)
+    '("m"        . meow-join)
+    '("n"        . meow-search)
+    '("o"        . meow-block)
+    '("O"        . meow-to-block)
+    '("p"        . meow-yank)
+    ;;
+    ;;
+    '("r"        . meow-replace)
+    '("R"        . meow-swap-grab)
+    '("s"        . meow-kill)
+    '("t"        . meow-till)
+    '("u"        . meow-undo)
+    '("U"        . meow-undo-in-selection)
+    '("v"        . meow-visit)
+    '("w"        . meow-mark-word)
+    '("W"        . meow-mark-symbol)
+    '("x"        . meow-line)
+    '("X"        . meow-goto-line)
+    '("y"        . meow-save)
+    '("Y"        . meow-sync-grab)
+    '("z"        . meow-pop-selection)
+    '("'"        . repeat)
+    '("C-o"      . meow-pop-to-mark)
+    '("C-i"      . meow-unpop-to-mark)
+    '("<escape>" . ignore)
+    )
+  )
+
+;; (general-evil-setup)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-(setq avy-timeout-seconds 0.2)
+(setopt avy-timeout-seconds 0.4)
+(bind-keys
+ :prefix "C-w"
+ :prefix-map window-management-keys
+ ("C-w" . ace-window)
+ ("x"   . delete-window)
+ ("s"   . split-window-below)
+ ("v"   . split-window-right)
+ ("o"   . delete-other-windows))
+
+(global-set-key (kbd "C-c k") 'kill-current-buffer)
+(global-set-key (kbd "C-c g") 'magit-status)
+(global-set-key (kbd "C-c n") 'doom/toggle-narrow-buffer)
+(global-set-key (kbd "C-v") 'my/scroll-down-half-page)
+(global-set-key (kbd "M-v") 'my/scroll-up-half-page)
+(global-set-key (kbd "C-x _") 'comment-kill)
+(global-set-key (kbd "M-d") 'hippie-expand)
+(global-set-key (kbd "M-o") 'forward-sexp)
+(global-set-key (kbd "M-i") 'backward-sexp)
+(global-set-key (kbd "M-O") 'up-list)
+
 
 ;; normal keybindings:
-(evil-define-key 'normal 'global
-  "J"   'back-to-indentation
-  "K"   'evil-last-non-blank
-  "gh" '+lookup/documentation
-  "gb"  'eval-defun
-  "-"   'evilnc-comment-or-uncomment-lines
-  (kbd "C-o")    '("jump to back"   . (lambda () (interactive) (better-jumper-jump-backward) (recenter-top-bottom)))
-  (kbd "C-i")    '("jump to fore"   . (lambda () (interactive) (better-jumper-jump-forward) (recenter-top-bottom)))
-  (kbd "C-s")    '("jump to below"  . save-buffer)
-  (kbd "s")      '("sneak"          . my-ace-sneak)
-  (kbd "C-j")    '("jump to below"  . sp-next-sexp)
-  (kbd "C-k")    '("jump to above"  . backward-up-list)
-  (kbd "C-B")    '("replace word"   . moon/query-replace-point)
-  (kbd "C-L")    '("multi next"     . evil-multiedit-match-and-next)
-  (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
-  (kbd "M-L")    '("smart enlarge"  . er/expand-region)
-  (kbd "M-e")    '("embark"         . embark-act)
-  (kbd "M-n")    '("consult notes"              . consult-notes)
-  ;; (kbd "M-p")    '("paste previous" . evil-paste-pop) ;; this is replaced by C-p
-  (kbd "M-b")    '("buffers"                    . my/switch-workspace-buffer-no-dired)
-  (kbd "M-d")    '("direds"                     . my/switch-workspace-buffer-only-dired)
-  (kbd "M-H")    '("smart shrink"   . er/contract-region)
-  (kbd "M-w")    '("alt workspace"  . +workspace/switch-to)
-  (kbd "SPC fn") '("yank file name" . my-yank-file-name)
-  (kbd "SPC e")  '("dirvish side"   . dirvish-side)
-  (kbd "M-<f4>") '("dirvish side"   . intelligent-close)
-  (kbd "<f8>")   '("next error"     . next-error)
-  (kbd "C-<backspace>") '("delete without copy" . my/delete-word-backward))
+(after! meow
+   (meow-normal-define-key
+   '("-"        . evilnc-comment-or-uncomment-lines)
+   '("C-r"      . undo-redo)
+   '("M-L"      . er/expand-region)
+   '("M-H"      . er/contract-region)
+   '("M-e"      . embark-act)
+   '("M-b"      . my/switch-workspace-buffer-no-dired)
+   '("M-d"      . my/switch-workspace-buffer-only-dired)
+   '("<escape>" . meow-cancel-selection)
+   '("g"        . nil)
+   '("gh"       . +lookup/documentation)
+   '("gd"       . +lookup/definition)
+   '("gl"       . align-regexp)
+   '("G"        . end-of-buffer)
+   '("q"        . meow-grab)
+   '("gg"       . beginning-of-buffer)
+   '("gv"       . exchange-point-and-mark)
+   '("%"        . my-jump-matching-pair)
+   '("@"        . meow-beacon-apply-kmacro)
+   ;; '("C-j"   . my/scroll-down-half-page)
+   ;; '("C-k"   . my/scroll-up-half-page)
+   '("TAB"      . nil)
+   '("_"        . comment-dwim)
+   '("S"        . embrace-add)
+   '("\\"       . avy-goto-char-timer)
+   )
+  (meow-motion-define-key
+   '("M-e"      . embark-act)
+   '("M-b"      . my/switch-workspace-buffer-no-dired)
+   '("M-d"      . my/switch-workspace-buffer-only-dired)
+   '("g"        . nil)
+   '("gh"       . +lookup/documentation)
+   '("gd"       . +lookup/definition)
+   '("G"        . end-of-buffer)
+   '("q"        . meow-grab)
+   '("gg"       . beginning-of-buffer)
+   '("h"        . meow-left)
+   '("l"        . meow-right)
+   '("TAB"      . nil)
+   ;; '("C-j"      . my/scroll-down-half-page)
+   ;;
+   )
+)
+
+;; (evil-define-key 'normal 'global
+;;   "J"   'back-to-indentation
+;;   "K"   'evil-last-non-blank
+;;   "gh" '+lookup/documentation
+;;   "gb"  'eval-defun
+;;   "-"   'evilnc-comment-or-uncomment-lines
+;;   ;; (kbd "C-o")    '("jump to back"   . (lambda () (interactive) (better-jumper-jump-backward) (recenter-top-bottom)))
+;;   ;; (kbd "C-i")    '("jump to fore"   . (lambda () (interactive) (better-jumper-jump-forward) (recenter-top-bottom)))
+;;   (kbd "C-s")    '("jump to below"              . save-buffer)
+;;   ;; (kbd "s")      '("sneak"                      . my-ace-sneak)
+;;   (kbd "C-j")    '("jump to below"              . sp-next-sexp)
+;;   (kbd "C-k")    '("jump to above"              . backward-up-list)
+;;   (kbd "C-B")    '("replace word"               . moon/query-replace-point)
+;;   (kbd "C-L")    '("multi next"                 . evil-multiedit-match-and-next)
+;;   (kbd "C-S-L")  '("multi all"                  . evil-multiedit-match-all)
+;;   (kbd "M-L")    '("smart enlarge"              . er/expand-region)
+;;   (kbd "M-e")    '("embark"                     . embark-act)
+;;   (kbd "M-n")    '("consult notes"              . consult-notes)
+;;   ;; (kbd "M-p")    '("paste previous"          . evil-paste-pop) ;; this is replaced by C-p
+;;   (kbd "M-b")    '("buffers"                    . my/switch-workspace-buffer-no-dired)
+;;   (kbd "M-d")    '("direds"                     . my/switch-workspace-buffer-only-dired)
+;;   (kbd "M-H")    '("smart shrink"               . er/contract-region)
+;;   (kbd "M-w")    '("alt workspace"              . +workspace/switch-to)
+;;   (kbd "SPC fn") '("yank file name"             . my-yank-file-name)
+;;   (kbd "SPC e")  '("dirvish side"               . dirvish-side)
+;;   (kbd "M-<f4>") '("dirvish side"               . intelligent-close)
+;;   (kbd "<f8>")   '("next error"                 . next-error)
+;;   (kbd "C-<backspace>") '("delete without copy" . my/delete-word-backward))
 
 (global-unset-key (kbd "C-;"))
 
-(map! :leader
-       :desc "join line      " "j" #'evil-join
-       :desc "buffer-vertico " "," #'my/switch-workspace-buffer-no-dired)
+;; (map! :leader
+;;        :desc "join line      " "j" #'evil-join
+;;        :desc "buffer-vertico " "," #'my/switch-workspace-buffer-no-dired)
 
-(evil-define-key 'visual 'global
-  (kbd "C-L")    '("multi next"     . evil-multiedit-match-and-next)
-  (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
-  (kbd "C-B")    '("replace region" . moon/query-replace-region)
-  "J"   'back-to-indentation
-  "K"   'evil-last-non-blank
-  "-"   'evilnc-comment-or-uncomment-lines)
+;; (evil-define-key 'visual 'global
+;;   (kbd "C-L")    '("multi next"     . evil-multiedit-match-and-next)
+;;   (kbd "C-S-L")  '("multi all"      . evil-multiedit-match-all)
+;;   (kbd "C-B")    '("replace region" . moon/query-replace-region)
+;;   "J"   'back-to-indentation
+;;   "K"   'evil-last-non-blank
+;;   "-"   'evilnc-comment-or-uncomment-lines)
 
-(after! info
-  (evil-define-key 'normal Info-mode-map
-    "J"   'back-to-indentation
-    "K"   'evil-last-non-blank))
+;; (after! info
+;;   (evil-define-key 'normal Info-mode-map
+;;     "J"   'back-to-indentation
+;;     "K"   'evil-last-non-blank))
 
-(evil-define-key 'insert 'global
-  (kbd "C-SPC")  '("complete filename" . comint-dynamic-complete-filename)
-  (kbd "M-e")    '("embark"            . embark-act)
-  (kbd "C-o")    '("delete word"       . my/delete-word-backward)
-  (kbd "M-y")    '("yasnippet expand"  . yas-expand)
-  (kbd "C-s")    '("save buffer"       . save-buffer)
-  (kbd "C-S-V")  '("paste"             . evil-paste-after))
+(meow-define-keys 'insert
+  '("C-SPC" . comint-dynamic-complete-filename)
+  '("M-e"   . embark-act)
+  '("C-o"   . my/delete-word-backward)
+  '("C-s"   . save-buffer)
+  '("C-S-V" . yank)
+  )
+;; (evil-define-key 'insert 'global
+;;   (kbd "C-SPC")  '("complete filename" . comint-dynamic-complete-filename)
+;;   (kbd "M-e")    '("embark"            . embark-act)
+;;   (kbd "C-o")    '("delete word"       . my/delete-word-backward)
+;;   (kbd "M-y")    '("yasnippet expand"  . yas-expand)
+;;   (kbd "C-s")    '("save buffer"       . save-buffer)
+;;   (kbd "C-S-V")  '("paste"             . evil-paste-after))
 
 ;; (general-nmap "RET" (general-simulate-key "cio"))
 ;; (general-nmap "f"   (general-simulate-key "gs SPC"))
@@ -267,11 +502,11 @@
 
 (map! :leader
       (:prefix ("b" . "buffer")
-       :desc "revert"              "r"   #'revert-buffer-fine-no-confirm))
+       :desc "revert"              "r"   #'revert-buffer-quick-no-confirm))
 
 ;; window control keybindings
-(map! :map evil-window-map
-      "o" `delete-other-windows)
+;; (map! :map evil-window-map
+;;       "o" `delete-other-windows)
 
 ;; dired keybindings:
 (map! :leader
@@ -279,64 +514,71 @@
        :desc "open dired in current file" "d" #'dired-jump
        :desc "jump history" "j" #'dirvish-history-jump))
 (after! dired
-  (evil-define-key 'normal dired-mode-map
-    "h"         'dired-up-directory
-    "l"         'dired-find-file
-    "-"         `dired-do-kill-lines
-    "w"         `dirvish-layout-toggle
-    "r"         `revert-buffer
-    "R"         `wdired-change-to-wdired-mode
-    "X"         `dired-do-rename
-    "o"         `dirvish-quick-access
-    "i"         `dirvish-file-info-menu
-    "y"         `dirvish-yank-menu
-    "f"         `dirvish-narrow
-    ","         `dirvish-quicksort
-    "."         `dired-omit-mode
-    (kbd "s")   `dirvish-fd
-    (kbd "TAB") `other-window
-    (kbd "M-l") `dirvish-ls-switches-menu
-    (kbd "M-m") `dirvish-mark-menu
-    (kbd "M-t") `dirvish-layout-toggle
-    (kbd "M-s") `dirvish-setup-menu
-    (kbd "M-e") `dirvish-emerge-menu
-    (kbd "M-j") `dirvish-fd-jump
-    (kbd "TAB") `dirvish-toggle-subtree))
+  (define-key dired-mode-map "h" `dired-up-directory)
+  (define-key dired-mode-map "l"         'dired-find-file)
+  (define-key dired-mode-map "-"         `dired-do-kill-lines)
+  (define-key dired-mode-map "w"         `dirvish-layout-toggle)
+  (define-key dired-mode-map "r"         `revert-buffer)
+  (define-key dired-mode-map "R"         `wdired-change-to-wdired-mode)
+
+  (define-key dired-mode-map "X"         `dired-do-rename)
+  (define-key dired-mode-map "o"         `dirvish-quick-access)
+  (define-key dired-mode-map "i"         `dirvish-file-info-menu)
+  (define-key dired-mode-map "y"         `dirvish-yank-menu)
+  (define-key dired-mode-map "f"         `dirvish-narrow)
+  (define-key dired-mode-map ","         `dirvish-quicksort)
+  (define-key dired-mode-map "."         `dired-omit-mode)
+  (define-key dired-mode-map (kbd "s")   `dirvish-fd)
+  (define-key dired-mode-map (kbd "TAB") `other-window)
+  (define-key dired-mode-map (kbd "M-l") `dirvish-ls-switches-menu)
+  (define-key dired-mode-map (kbd "M-m") `dirvish-mark-menu)
+  (define-key dired-mode-map (kbd "M-t") `dirvish-layout-toggle)
+  (define-key dired-mode-map (kbd "M-s") `dirvish-setup-menu)
+  (define-key dired-mode-map (kbd "M-e") `dirvish-emerge-menu)
+  (define-key dired-mode-map (kbd "M-j") `dirvish-fd-jump)
+  (define-key dired-mode-map (kbd "TAB") `dirvish-toggle-subtree))
 
 ; haskell repl(lol) mode
-(evil-define-key 'normal haskell-mode-map
-  (kbd "gk")     '("check info" . haskell-process-do-info)
-  (kbd "SPC lc") '("load the repl" . haskell-process-load-file))
-(evil-define-key 'insert haskell-lol-mode-map
-  (kbd "C-l")   `haskell-interactive-mode-clear
-  (kbd "<up>")  `haskell-interactive-mode-history-previous
-  (kbd "<down>")`haskell-interactive-mode-history-next)
+;; (evil-define-key 'normal haskell-mode-map
+;;   (kbd "gk")     '("check info" . haskell-process-do-info)
+;;   (kbd "SPC lc") '("load the repl" . haskell-process-load-file))
+;; (evil-define-key 'insert haskell-lol-mode-map
+;;   (kbd "C-l")   `haskell-interactive-mode-clear
+;;   (kbd "<up>")  `haskell-interactive-mode-history-previous
+;;   (kbd "<down>")`haskell-interactive-mode-history-next)
 
 ; idris repl(interactive) mode
-(evil-define-key 'insert idris-repl-mode-map
-  (kbd "C-l")   `idris-repl-clear-buffer
-  (kbd "<up>")  `idris-repl-backward-history
-  (kbd "<down>")`idris-repl-forward-history)
+;; (evil-define-key 'insert idris-repl-mode-map
+;;   (kbd "C-l")   `idris-repl-clear-buffer
+;;   (kbd "<up>")  `idris-repl-backward-history
+;;   (kbd "<down>")`idris-repl-forward-history)
 
-(evil-define-key 'normal pdf-view-mode-map
-  (kbd "j")  (lambda() (interactive) (pdf-view-next-line-or-next-page 2))
-  (kbd "k")  (lambda() (interactive) (pdf-view-previous-line-or-previous-page 2))
-  (kbd "d")  (lambda() (interactive) (pdf-view-next-line-or-next-page 8))
-  (kbd "u")  (lambda() (interactive) (pdf-view-previous-line-or-previous-page 8)))
+;; (evil-define-key 'normal pdf-view-mode-map
+;;   (kbd "j")  (lambda() (interactive) (pdf-view-next-line-or-next-page 2))
+;;   (kbd "k")  (lambda() (interactive) (pdf-view-previous-line-or-previous-page 2))
+;;   (kbd "d")  (lambda() (interactive) (pdf-view-next-line-or-next-page 8))
+;;   (kbd "u")  (lambda() (interactive) (pdf-view-previous-line-or-previous-page 8)))
 
-(evil-define-key 'normal vterm-mode-map
-  (kbd "M-m w")  '("new frame" . make-frame-command))
+;; (evil-define-key 'normal vterm-mode-map
+;;   (kbd "M-m w")  '("new frame" . make-frame-command))
 
-(evil-define-key 'normal org-mode-map
-  (kbd "C-J")    '("jump to below heading"   . org-next-visible-heading)
-  (kbd "C-K")    '("jump to above heading"   . org-previous-visible-heading))
+;; (evil-define-key 'normal org-mode-map
+;;   (kbd "C-J")    '("jump to below heading"   . org-next-visible-heading)
+;;   (kbd "C-K")    '("jump to above heading"   . org-previous-visible-heading))
 
-(evil-define-key 'insert vterm-mode-map
-  (kbd "C-S-c")  '("copy" . vterm-yank)
-  (kbd "C-S-v")  '("paste" . vterm-xterm-paste))
+;; (evil-define-key 'insert vterm-mode-map
+;;   (kbd "C-S-c")  '("copy" . vterm-yank)
+;;   (kbd "C-S-v")  '("paste" . vterm-xterm-paste))
 
-(define-key evil-command-line-map
-  (kbd "C-S-v")  '("paste" . evil-paste-after))
+;; (evil-define-key 'normal compilation-mode-map
+;;   (kbd "M-n")    '("compilation next error" . compilation-next-error)
+;;   (kbd "M-p")    '("compilation previous error" . compilation-previous-error))
+;; (evil-define-key 'normal compilation-shell-minor-mode-map
+;;   (kbd "M-n")    '("compilation next error" . compilation-next-error)
+;;   (kbd "M-p")    '("compilation previous error" . compilation-previous-error))
+
+;; (define-key evil-command-line-map
+;;   (kbd "C-S-v")  '("paste" . evil-paste-after))
 
 ; Alt+m key bindings
 (bind-keys
@@ -349,7 +591,7 @@
  ("w" . make-frame-command)
  ("t" . todo-show)
  ("e" . eval-defun)
- ("r" . revert-buffer-fine-no-confirm))
+ ("r" . revert-buffer-quick-no-confirm))
 
 
 (dotimes (i 5)
@@ -357,11 +599,20 @@
     (defalias (intern (format "dashboard-open-recent-file-by-arg-%d" arg))
       (lambda () (interactive) (dashboard-open-recent-file-by-arg arg nil))
       (format "open recent file #%d" arg))))
-(evil-define-key `normal +doom-dashboard-mode-map
-  (kbd "1") 'dashboard-open-recent-file-by-arg-1
-  (kbd "2") 'dashboard-open-recent-file-by-arg-2
-  (kbd "3") 'dashboard-open-recent-file-by-arg-3
-  (kbd "4") 'dashboard-open-recent-file-by-arg-4
-  (kbd "5") 'dashboard-open-recent-file-by-arg-5)
+(bind-keys
+ :map +doom-dashboard-mode-map
+  ("1" . dashboard-open-recent-file-by-arg-1)
+  ("2" . dashboard-open-recent-file-by-arg-2)
+  ("3" . dashboard-open-recent-file-by-arg-3)
+  ("4" . dashboard-open-recent-file-by-arg-4)
+  ("5" . dashboard-open-recent-file-by-arg-5))
+
+
+;; (evil-define-key `normal +doom-dashboard-mode-map
+;;   (kbd "1") 'dashboard-open-recent-file-by-arg-1
+;;   (kbd "2") 'dashboard-open-recent-file-by-arg-2
+;;   (kbd "3") 'dashboard-open-recent-file-by-arg-3
+;;   (kbd "4") 'dashboard-open-recent-file-by-arg-4
+;;   (kbd "5") 'dashboard-open-recent-file-by-arg-5)
 
 (provide 'init-keybinding)

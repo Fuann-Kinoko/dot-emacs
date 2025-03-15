@@ -13,7 +13,7 @@
   (vertico-multiform-mode)
   :config
   ;; flat stands for one-line mode
-  (setq vertico-multiform-commands
+  (setopt vertico-multiform-commands
         '(
           (consult-line
            posframe
@@ -31,10 +31,10 @@
           (moon/query-replace-region (:not posframe) flat)
           (moon/query-replace-point (:not posframe) flat)
           (query-replace buffer indexed)
-          (t posframe)
+          ;; (t posframe)
           ;; (find-file flat)
           ))
-  (setq vertico-posframe-parameters
+  (setopt vertico-posframe-parameters
       '((left-fringe . 8)
         (right-fringe . 8)
         (alpha . 50)))
@@ -44,7 +44,9 @@
 (use-package! orderless
   :custom
   ;; enable flex to fuzzy matching, partically to better select buffer for me
-  (orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp))
+  ;; (orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp))
+  ;; NOTE: use ! as a negative/exclude pattern, example: "#defun# !;;" -> search for defun without comment
+  (orderless-matching-styles '(orderless-literal orderless-regexp))
   )
 
   ;; (setq vertico-multiform-categories

@@ -1,18 +1,18 @@
 ;; ;;; configs/orgs.el -*- lexical-binding: t; -*-
 
 
-(setq org-directory "~/org/")
+(setopt org-directory "~/org/")
 
-(setq org-link-search-must-match-exact-headline nil) ;; to enable linking words & bookmarks
-(setq +zen-text-scale 1)
+(setopt org-link-search-must-match-exact-headline nil) ;; to enable linking words & bookmarks
+(setopt +zen-text-scale 1)
 
 (require 'org-download)
 (require 'org-ros)
 (add-hook 'dired-mode-hook 'org-download-enable)
-(setq org-image-actual-width 600)
+(setopt org-image-actual-width 600)
 
-(setq line-spacing 0.1)
-(setq org-startup-with-inline-images t)
+(setopt line-spacing 0.1)
+(setopt org-startup-with-inline-images t)
 
 ;; prettify symbol
 (setq-default prettify-symbols-alist
@@ -44,20 +44,6 @@
   ("#+BEGIN:"        . "✎")
   ("#+CAPTION:"      . "✑")
   ("#+ATTR_LATEX"    . "🄛")))
-
-;; (use-package deft
-;;   :defer t
-;;   :config
-;;   (progn
-;;     (setq deft-extensions '("md" "markdown" "org" "txt"))
-;;     (setq deft-directory "~/org/")
-;;     (setq deft-file-naming-rules '((noslash . "-")
-;;                                    (nospace . "-")
-;;                                    (case-fn . downcase)))
-;;     (setq deft-recursive t)
-;;     (evil-define-key 'insert deft-mode-map (kbd "C-<backspace>") #'deft-filter-decrement-word)
-;;     (evil-define-key 'insert deft-mode-map (kbd "C-w") #'deft-filter-decrement-word)
-;;     (evil-define-key 'insert deft-mode-map (kbd "C-k") #'deft-filter-clear)))
 
 (use-package! org-appear
   :defer t
@@ -98,15 +84,16 @@
   )
 
 (use-package! org-latex-preview :defer t
+  ;; temp disable, TODO: add latex preview in windows
+  :disabled t
   :init
-  (setq org-startup-with-latex-preview 't)
-  (setq org-latex-preview-live nil)
-  (setq org-pretty-entities 't)
+  (setopt org-startup-with-latex-preview 't)
+  (setopt org-pretty-entities 't)
   :hook
   (org-mode . org-latex-preview-auto-mode)
   :config
   ;; Increase preview width
-  (setq org-latex-preview-appearance-options
+  (setopt org-latex-preview-appearance-options
         '(
           :foreground auto
           :background "Transparent"
@@ -116,7 +103,7 @@
 
   ;; Use dvisvgm to generate previews
   ;; You don't need this, it's the default:
-  (setq org-latex-preview-process-default 'dvisvgm)
+  (setopt org-latex-preview-process-default 'dvisvgm)
 
   ;; Turn on auto-mode, it's built into Org and much faster/more featured than
   ;; org-fragtog. (Remember to turn off/uninstall org-fragtog.)
@@ -127,19 +114,19 @@
   ;; (add-hook 'org-latex-preview-auto-ignored-commands 'previous-line)
 
   ;; Enable consistent equation numbering
-  (setq org-latex-preview-numbered nil)
+  (setopt org-latex-preview-numbered nil)
 
   ;; Bonus: Turn on live previews.  This shows you a live preview of a LaTeX
   ;; fragment and updates the preview in real-time as you edit it.
   ;; To preview only environments, set it to '(block edit-special) instead
-  (setq org-latex-preview-live t)
+  (setopt org-latex-preview-live t)
 
   ;; More immediate live-previews -- the default delay is 1 second
-  (setq org-latex-preview-live-debounce 0.25))
+  (setopt org-latex-preview-live-debounce 0.25))
 ;;
 ;; ;; Use CDLaTeX to improve editing experiences
-(use-package! cdlatex
-  :hook (org-mode . cdlatex-mode))
+;; (use-package! cdlatex
+;;   :hook (org-mode . cdlatex-mode))
 
 (after! org
   (set-ligatures! 'org-mode
@@ -187,7 +174,7 @@
 )
 
 (after! org
-    (setq org-src-fontify-natively t
+    (setopt org-src-fontify-natively t
     org-fontify-whole-heading-line t
     org-agenda-block-separator ""
     org-fontify-done-headline t

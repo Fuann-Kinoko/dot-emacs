@@ -1,7 +1,7 @@
 (defun auto-dark-banner-update (img-path)
   (progn
     ;; update banner
-    (setq fancy-splash-image img-path)
+    (setopt fancy-splash-image img-path)
     ;; reload doom dashboard if it is
     (when (eq major-mode '+doom-dashboard-mode)
         (+doom-dashboard/open (selected-frame)))))
@@ -10,8 +10,8 @@
   :config
   (after! doom-ui
     ;; set your favorite themes
-    (setq! auto-dark-dark-theme 'doom-gruvbox-material
-          auto-dark-light-theme 'doom-flatwhite)
+    (setopt auto-dark-dark-theme  'doom-gruvbox-material
+            auto-dark-light-theme 'doom-flatwhite)
     (auto-dark-mode 1)
     (add-hook 'auto-dark-dark-mode-hook
       (apply-partially #'auto-dark-banner-update "~/.config/doom/banner3.pbm"))

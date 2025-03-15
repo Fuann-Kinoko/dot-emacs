@@ -14,25 +14,25 @@
         ("p"    "~/Pictures"               "Pictures")
         ("b"    "~/Documents/book"         "Books")))
   :config
-  (setq dired-do-revert-buffer t) ;; refresh buffer automatically after do commands
-  (setq dired-listing-switches "-ahl -v --group-directories-first --almost-all")
+  (setopt dired-do-revert-buffer t) ;; refresh buffer automatically after do commands
+  (setopt dired-listing-switches "-ahl -v --group-directories-first --almost-all")
 
-  (setq dirvish-attributes '(collapse file-size file-time))
+  (setopt dirvish-attributes '(collapse file-size file-time))
 
-  (setq dirvish-default-layout '(1 0.11 0.55))
+  (setopt dirvish-default-layout '(1 0.11 0.55))
 
-  (setq dirvish-side-auto-close t)
-  (setq dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|^\\.DS_Store\\'\\|^\\..*\\|^\\.project\\(?:ile\\)?\\'\\|^\\.\\(?:svn\\|git\\)\\'\\|^\\.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
+  (setopt dirvish-side-auto-close t)
+  (setopt dired-omit-files "\\`[.]?#\\|\\`[.][.]?\\'\\|^\\.DS_Store\\'\\|^\\..*\\|^\\.project\\(?:ile\\)?\\'\\|^\\.\\(?:svn\\|git\\)\\'\\|^\\.ccls-cache\\'\\|\\(?:\\.js\\)?\\.meta\\'\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'")
 
-  (setq dirvish-preview-dispatchers
+  (setopt dirvish-preview-dispatchers
       (cl-substitute 'pdf-preface 'pdf dirvish-preview-dispatchers))
 
-  (dirvish-define-preview exa (file)
-    "Use `exa' to generate directory preview."
-    :require ("exa") ; tell Dirvish to check if we have the executable
-    (when (file-directory-p file) ; we only interest in directories here
-      `(shell . ("exa" "-al" "--color=always" "--icons"
-          "--group-directories-first" ,file))))
+  ;; (dirvish-define-preview exa (file)
+  ;;   "Use `exa' to generate directory preview."
+  ;;   :require ("exa") ; tell Dirvish to check if we have the executable
+  ;;   (when (file-directory-p file) ; we only interest in directories here
+  ;;     `(shell . ("exa" "-al" "--color=always" "--icons"
+  ;;         "--group-directories-first" ,file))))
 
   (add-to-list 'dirvish-preview-dispatchers 'exa))
 
