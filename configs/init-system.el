@@ -8,7 +8,7 @@
 ;; enlarge gc cons
 
 ;; switch magit git to quicker one
-(setopt magit-git-executable "C:\\Program Files\\Git\\mingw64\\bin\\git.exe")
+(setopt magit-git-executable "C:\\Program Files\\Git\\cmd\\git.exe")
 
 ;; add path for pwsh so doom can reload properly in windows
 (push "C:\\Program Files\\PowerShell\\7" exec-path)
@@ -25,7 +25,7 @@
 (set-language-environment "Chinese-GB")
 (set-default-coding-systems 'utf-8)
 (prefer-coding-system 'utf-8)
-(setopt selection-coding-system 'utf-8)
+(setopt selection-coding-system 'utf-16le-dos) ; 只有剪贴板必须使用utf-16le，否则乱码
 
 (when (eq system-type 'windows-nt)
   ;; powershell default shell
@@ -61,4 +61,6 @@
 ;; make custom themes safe
 (setopt custom-safe-themes t)
 
+;; more undo
+(setopt undo-limit 1600000)
 (provide 'init-system)

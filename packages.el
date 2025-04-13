@@ -55,6 +55,7 @@
 (package! atomic-chrome)
 (package! auto-dark)
 (package! sdlang-mode)
+(package! glsl-mode)
 (package! vertico-posframe)
 (package! pangu-spacing)
 

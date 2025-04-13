@@ -30,6 +30,7 @@
           (+lookup/references (:not posframe) buffer)
           (moon/query-replace-region (:not posframe) flat)
           (moon/query-replace-point (:not posframe) flat)
+          (consult-lsp-symbols buffer)
           (query-replace buffer indexed)
           ;; (t posframe)
           ;; (find-file flat)

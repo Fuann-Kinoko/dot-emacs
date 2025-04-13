@@ -1,4 +1,5 @@
 ;;; configs/keybinding.el -*- lexical-binding: t; -*-
+;;; Code:
 
 ;; i don't need esc prefix, so that's it
 ;; (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -10,16 +11,16 @@
 ;; Embark settings
 (setopt embark-quit-after-action nil)
 (map! :map 'minibuffer-mode-map
-  "M-e"           #'embark-act
-  "C-o"           #'my/delete-word-backward
-  "C-w"           #'my/delete-word-backward
-  "C-<backspace>" #'my/delete-word-backward)
+      "M-e"           #'embark-act
+      "C-o"           #'my/delete-word-backward
+      "C-w"           #'my/delete-word-backward
+      "C-<backspace>" #'my/delete-word-backward)
 
 ;; remap yes or no -> or or no :)
 (define-key y-or-n-p-map      "o" 'act)
 (define-key query-replace-map "o" 'act)
 
-; ================== custom functions ==================
+                                        ; ================== custom functions ==================
 
 ;; (defun my-ace-sneak ()
 ;;   "Simulate gs SPC for sneak-like cursor jump."
@@ -41,46 +42,46 @@
   "Query replace selected region."
   (interactive)
   (let ((sel (buffer-substring-no-properties
-                  (region-beginning)
-                  (region-end))))
-        ;; (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
-        ;;         (lambda () (setopt vr--regexp-string sel))))  ;;
-        ;; (call-interactively 'vr/query-replace))))           ;;
-  (query-replace sel
+              (region-beginning)
+              (region-end))))
+    ;; (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
+    ;;         (lambda () (setopt vr--regexp-string sel))))  ;;
+    ;; (call-interactively 'vr/query-replace))))           ;;
+    (query-replace sel
                    (completing-read (format "Replace \"%s\" to: " sel) ())
                    nil (beginning-of-line))))
 (defun moon/query-replace-point ()
   "Query replace thing at point."
   (interactive)
   (let ((word (thing-at-point 'word t)))
-        ;; (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
-        ;;         (lambda () (setopt vr--regexp-string word)))) ;;
-        ;; (call-interactively 'vr/query-replace))))           ;;
+    ;; (cl-letf (((symbol-function 'vr--set-regexp-string) ;;
+    ;;         (lambda () (setopt vr--regexp-string word)))) ;;
+    ;; (call-interactively 'vr/query-replace))))           ;;
     (query-replace word
                    (completing-read (format "Replace \"%s\" to: " word) ())
                    nil (beginning-of-line))))
 
 (defun revert-buffer-quick-no-confirm ()
-  "revert buffer fine without confirm"
+  "Revert buffer fine without confirm."
   (interactive)
   ;; (revert-buffer-with-fine-grain nil t))
   (revert-buffer t t nil))
 
 (defun repeat-last-complex-command ()
-  "Basically 'repeat-complex-command' but without confirm."
+  "Basically `repeat-complex-command' but without confirm."
   (lol)
   (repeat-complex-command 1))
 
 (defun intelligent-close ()
-  "quit a frame the same way no matter what kind of frame you are on"
+  "Quit a frame the same way no matter what kind of frame you are on."
   (interactive)
   (if (eq (car (visible-frame-list)) (selected-frame))
       ;;for parent/master frame...
       (if (> (length (visible-frame-list)) 1)
           ;;close a parent with children present
-   (delete-frame (selected-frame))
+          (delete-frame (selected-frame))
         ;;close a parent with no children present
- (save-buffers-kill-emacs))
+        (save-buffers-kill-emacs))
     ;;close a child frame
     (delete-frame (selected-frame))))
 
@@ -93,7 +94,7 @@
 ;; delete not kill it into kill-ring
 ;; _based on_ http://ergoemacs.org/emacs/emacs_kill-ring.html
 (defun my/delete-word-backward (arg)
-  "Delete backward, not triggering `kill-ring', dont bother with 'arg' tho."
+  "Delete backward, not triggering `kill-ring', dont bother with `ARG' tho."
   (interactive "p")
   (delete-region
    (point)
@@ -132,13 +133,12 @@
     (lambda (action cand)
       (funcall preview action cand))))
 (defun my/switch-workspace-buffer-with-extra-predicate (extra-predicate)
-  "the arg 'extra-predicate' is to filter the buffer list in it
-   it is describe as a lambda function containing arg 'buf'
+  "the arg `extra-predicate' is to filter the buffer list in it
+   it is describe as a lambda function containing arg `buf'
    please refer to
-   '+vertico--workspace-generate-sources' and
-   '+vertico/switch-workspace-buffer'
-   for more information.
-  "
+   `+vertico--workspace-generate-sources' and
+   `+vertico/switch-workspace-buffer'
+   for more information."
   (require 'consult)
   (when-let
       (buffer
@@ -182,13 +182,13 @@
   (my/switch-workspace-buffer-with-extra-predicate
    (lambda (buf)
      (not (eq (buffer-local-value 'major-mode (get-buffer buf))
-                                                      'dired-mode)))))
+              'dired-mode)))))
 (defun my/switch-workspace-buffer-only-dired ()
   (interactive)
   (my/switch-workspace-buffer-with-extra-predicate
    (lambda (buf)
      (eq (buffer-local-value 'major-mode (get-buffer buf))
-                                                      'dired-mode))))
+         'dired-mode))))
 (defun my-jump-matching-pair ()
   (interactive)
   (cond ((looking-at "\\s\(") (forward-sexp) (backward-char 1))
@@ -198,7 +198,7 @@
   (interactive)
   (let ((dir_p (if (eq direction 'up)
                    0.99
-                   -0.99)))             ; sth bad will happen if it is 1.0/-1.0, the last line may be cutoff
+                 -0.99)))             ; sth bad will happen if it is 1.0/-1.0, the last line may be cutoff
     (if lines
         (pixel-scroll-precision-interpolate (* dir_p lines (pixel-line-height)))
       (pixel-scroll-interpolate-down))))
@@ -233,125 +233,146 @@
                (move-to-window-line 0)
                (recenter))))))
 
+;;@@ 文字计数，可以处理中文和英文
+;; Author: Andy Stewart <lazycat.manatee@gmail.com>
+;; http://www.emacswiki.org/emacs/download/basic-toolkit.el
+(defun count-ce-words (beg end)
+  "Count Chinese and English words in marked region."
+  (interactive "r")
+  (let ((cn-word 0)
+        (en-word 0)
+        (total-word 0)
+        (total-byte 0))
+    (setq cn-word (count-matches "\\cc" beg end)
+          en-word (count-matches "\\w+\\W" beg end))
+    (setq total-word (+ cn-word en-word)
+          total-byte (+ cn-word (abs (- beg end))))
+    (message (format "Total: %d (CN: %d, EN: %d) words, %d bytes."
+                     total-word cn-word en-word total-byte))))
 
-; ================== bindings ==================
+(defun meow-repeat-expand-10 ()
+  "I don't want to hit 0 because it changes the mind painfully."
+  (interactive)
+  (meow-expand 0))
+
+                                        ; ================== bindings ==================
 
 (after! meow
   (setopt meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
   (meow-motion-define-key
-    '("<escape>" . ignore)
-    '("/"        . isearch-forward)
-    '(";"        . meow-reverse)
-    '(","        . meow-inner-of-thing)
-    '("."        . meow-bounds-of-thing)
-    '("["        . meow-beginning-of-thing)
-    '("]"        . meow-end-of-thing)
-    '("b"        . meow-back-word)
-    '("B"        . meow-back-symbol)
-    '("e"        . meow-next-word)
-    '("E"        . meow-next-symbol)
-    '("j"        . meow-next)
-    '("J"        . meow-next-expand)
-    '("k"        . meow-prev)
-    '("K"        . meow-prev-expand)
-    '("n"        . meow-search)
-    '("o"        . meow-block)
-    '("O"        . meow-to-block)
-    '("v"        . meow-visit)
-    '("w"        . meow-mark-word)
-    '("W"        . meow-mark-symbol)
-    '("x"        . meow-line)
-    '("X"        . meow-goto-line)
-    '("m"        . meow-join)
-    '("y"        . meow-save)
-    '("Y"        . meow-sync-grab)
-    '("z"        . meow-pop-selection)
-    '("'"        . repeat)
-    '("<escape>" . ignore)
-    )
+   '("<escape>" . ignore)
+   '("/"        . isearch-forward)
+   '(";"        . meow-reverse)
+   '(","        . meow-inner-of-thing)
+   '("."        . meow-bounds-of-thing)
+   '("["        . meow-beginning-of-thing)
+   '("]"        . meow-end-of-thing)
+   '("b"        . meow-back-word)
+   '("B"        . meow-back-symbol)
+   '("e"        . meow-next-word)
+   '("E"        . meow-next-symbol)
+   '("j"        . meow-next)
+   '("J"        . meow-next-expand)
+   '("k"        . meow-prev)
+   '("K"        . meow-prev-expand)
+   '("n"        . meow-search)
+   '("o"        . meow-block)
+   '("O"        . meow-to-block)
+   '("v"        . meow-visit)
+   '("w"        . meow-mark-word)
+   '("W"        . meow-mark-symbol)
+   '("x"        . meow-line)
+   '("X"        . meow-goto-line)
+   '("m"        . meow-join)
+   '("y"        . meow-save)
+   '("Y"        . meow-sync-grab)
+   '("z"        . meow-pop-selection)
+   '("'"        . repeat)
+   '("<escape>" . ignore)
+   )
   (meow-leader-define-key
-    ;; SPC j/k will run the original command in MOTION state.
-    ;; '("j" . "H-j")
-    ;; '("k" . "H-k")
-    ;; Use SPC (0-9) for digit arguments.
-    '("e"        . dirvish-side)
-    '("SPC"      . projectile-find-file)
-    '("1"        . meow-digit-argument)
-    '("2"        . meow-digit-argument)
-    '("3"        . meow-digit-argument)
-    '("4"        . meow-digit-argument)
-    '("5"        . meow-digit-argument)
-    '("6"        . meow-digit-argument)
-    '("7"        . meow-digit-argument)
-    '("8"        . meow-digit-argument)
-    '("9"        . meow-digit-argument)
-    '("0"        . meow-digit-argument)
-    '("/"        . meow-keypad-describe-key)
-    '("?"        . meow-cheatsheet)
-  )
+   ;; SPC j/k will run the original command in MOTION state.
+   ;; '("j" . "H-j")
+   ;; '("k" . "H-k")
+   ;; Use SPC (0-9) for digit arguments.
+   '("e"        . dirvish-side)
+   '("SPC"      . projectile-find-file)
+   '("1"        . meow-digit-argument)
+   '("2"        . meow-digit-argument)
+   '("3"        . meow-digit-argument)
+   '("4"        . meow-digit-argument)
+   '("5"        . meow-digit-argument)
+   '("6"        . meow-digit-argument)
+   '("7"        . meow-digit-argument)
+   '("8"        . meow-digit-argument)
+   '("9"        . meow-digit-argument)
+   '("0"        . meow-digit-argument)
+   '("/"        . meow-keypad-describe-key)
+   '("?"        . meow-cheatsheet)
+   )
   (meow-normal-define-key
-    '("0"        . meow-expand-0)
-    '("9"        . meow-expand-9)
-    '("8"        . meow-expand-8)
-    '("7"        . meow-expand-7)
-    '("6"        . meow-expand-6)
-    '("5"        . meow-expand-5)
-    '("4"        . meow-expand-4)
-    '("3"        . meow-expand-3)
-    '("2"        . meow-expand-2)
-    '("1"        . meow-expand-1)
-    '("/"        . isearch-forward)
-    '(";"        . meow-reverse)
-    '(","        . meow-inner-of-thing)
-    '("."        . meow-bounds-of-thing)
-    '("["        . meow-beginning-of-thing)
-    '("]"        . meow-end-of-thing)
-    '("a"        . meow-append)
-    '("A"        . meow-open-below)
-    '("b"        . meow-back-word)
-    '("B"        . meow-back-symbol)
-    '("c"        . meow-change)
-    '("d"        . meow-delete)
-    '("D"        . meow-backward-delete)
-    '("e"        . meow-next-word)
-    '("E"        . meow-next-symbol)
-    '("f"        . meow-find)
-    '("h"        . meow-left)
-    '("H"        . meow-left-expand)
-    '("i"        . meow-insert)
-    '("I"        . meow-open-above)
-    '("j"        . meow-next)
-    '("J"        . meow-next-expand)
-    '("k"        . meow-prev)
-    '("K"        . meow-prev-expand)
-    '("l"        . meow-right)
-    '("L"        . meow-right-expand)
-    '("m"        . meow-join)
-    '("n"        . meow-search)
-    '("o"        . meow-block)
-    '("O"        . meow-to-block)
-    '("p"        . meow-yank)
-    ;;
-    ;;
-    '("r"        . meow-replace)
-    '("R"        . meow-swap-grab)
-    '("s"        . meow-kill)
-    '("t"        . meow-till)
-    '("u"        . meow-undo)
-    '("U"        . meow-undo-in-selection)
-    '("v"        . meow-visit)
-    '("w"        . meow-mark-word)
-    '("W"        . meow-mark-symbol)
-    '("x"        . meow-line)
-    '("X"        . meow-goto-line)
-    '("y"        . meow-save)
-    '("Y"        . meow-sync-grab)
-    '("z"        . meow-pop-selection)
-    '("'"        . repeat)
-    '("C-o"      . meow-pop-to-mark)
-    '("C-i"      . meow-unpop-to-mark)
-    '("<escape>" . ignore)
-    )
+   '("0"        . meow-expand-0)
+   '("9"        . meow-expand-9)
+   '("8"        . meow-expand-8)
+   '("7"        . meow-expand-7)
+   '("6"        . meow-expand-6)
+   '("5"        . meow-expand-5)
+   '("4"        . meow-expand-4)
+   '("3"        . meow-expand-3)
+   '("2"        . meow-expand-2)
+   '("1"        . meow-expand-1)
+   '("/"        . isearch-forward)
+   '(";"        . meow-reverse)
+   '(","        . meow-inner-of-thing)
+   '("."        . meow-bounds-of-thing)
+   '("["        . meow-beginning-of-thing)
+   '("]"        . meow-end-of-thing)
+   '("a"        . meow-append)
+   '("A"        . meow-open-below)
+   '("b"        . meow-back-word)
+   '("B"        . meow-back-symbol)
+   '("c"        . meow-change)
+   '("d"        . meow-delete)
+   '("D"        . meow-backward-delete)
+   '("e"        . meow-next-word)
+   '("E"        . meow-next-symbol)
+   '("f"        . meow-find)
+   '("h"        . meow-left)
+   '("H"        . meow-left-expand)
+   '("i"        . meow-insert)
+   '("I"        . meow-open-above)
+   '("j"        . meow-next)
+   '("J"        . meow-next-expand)
+   '("k"        . meow-prev)
+   '("K"        . meow-prev-expand)
+   '("l"        . meow-right)
+   '("L"        . meow-right-expand)
+   '("m"        . meow-join)
+   '("n"        . meow-search)
+   '("o"        . meow-block)
+   '("O"        . meow-to-block)
+   '("p"        . meow-yank)
+   ;;
+   ;;
+   '("r"        . meow-replace)
+   '("R"        . meow-swap-grab)
+   '("s"        . meow-kill)
+   '("t"        . meow-till)
+   '("u"        . meow-undo)
+   '("U"        . meow-undo-in-selection)
+   '("v"        . meow-visit)
+   '("w"        . meow-mark-word)
+   '("W"        . meow-mark-symbol)
+   '("x"        . meow-line)
+   '("X"        . meow-goto-line)
+   '("y"        . meow-save)
+   '("Y"        . meow-sync-grab)
+   '("z"        . meow-pop-selection)
+   '("'"        . repeat)
+   '("C-o"      . meow-pop-to-mark)
+   '("C-i"      . meow-unpop-to-mark)
+   '("<escape>" . ignore)
+   )
   )
 
 ;; (general-evil-setup)
@@ -360,8 +381,9 @@
 (bind-keys
  :prefix "C-w"
  :prefix-map window-management-keys
- ("C-w" . ace-window)
+ ("C-w" . other-window)
  ("x"   . delete-window)
+ ("k"   . delete-window)
  ("s"   . split-window-below)
  ("v"   . split-window-right)
  ("o"   . delete-other-windows))
@@ -369,18 +391,20 @@
 (global-set-key (kbd "C-c k") 'kill-current-buffer)
 (global-set-key (kbd "C-c g") 'magit-status)
 (global-set-key (kbd "C-c n") 'doom/toggle-narrow-buffer)
-(global-set-key (kbd "C-v") 'my/scroll-down-half-page)
-(global-set-key (kbd "M-v") 'my/scroll-up-half-page)
+(global-set-key (kbd "C-v")   'my/scroll-down-half-page)
+(global-set-key (kbd "M-v")   'my/scroll-up-half-page)
 (global-set-key (kbd "C-x _") 'comment-kill)
-(global-set-key (kbd "M-d") 'hippie-expand)
-(global-set-key (kbd "M-o") 'forward-sexp)
-(global-set-key (kbd "M-i") 'backward-sexp)
-(global-set-key (kbd "M-O") 'up-list)
+(global-set-key (kbd "M-d")   'hippie-expand)
+(global-set-key (kbd "M-o")   'forward-sexp)
+(global-set-key (kbd "M-i")   'backward-sexp)
+(global-set-key (kbd "M-O")   'up-list)
+(global-set-key (kbd "M-n")   `consult-flycheck)
+(global-set-key (kbd "<f8>")  'project-shell)
 
 
 ;; normal keybindings:
 (after! meow
-   (meow-normal-define-key
+  (meow-normal-define-key
    '("-"        . evilnc-comment-or-uncomment-lines)
    '("C-r"      . undo-redo)
    '("M-L"      . er/expand-region)
@@ -397,6 +421,7 @@
    '("q"        . meow-grab)
    '("gg"       . beginning-of-buffer)
    '("gv"       . exchange-point-and-mark)
+   '("gc"       . count-ce-words)
    '("%"        . my-jump-matching-pair)
    '("@"        . meow-beacon-apply-kmacro)
    ;; '("C-j"   . my/scroll-down-half-page)
@@ -405,6 +430,7 @@
    '("_"        . comment-dwim)
    '("S"        . embrace-add)
    '("\\"       . avy-goto-char-timer)
+   '("`"        . meow-repeat-expand-10)
    )
   (meow-motion-define-key
    '("M-e"      . embark-act)
@@ -414,7 +440,6 @@
    '("gh"       . +lookup/documentation)
    '("gd"       . +lookup/definition)
    '("G"        . end-of-buffer)
-   '("q"        . meow-grab)
    '("gg"       . beginning-of-buffer)
    '("h"        . meow-left)
    '("l"        . meow-right)
@@ -422,7 +447,7 @@
    ;; '("C-j"      . my/scroll-down-half-page)
    ;;
    )
-)
+  )
 
 ;; (evil-define-key 'normal 'global
 ;;   "J"   'back-to-indentation
@@ -504,10 +529,6 @@
       (:prefix ("b" . "buffer")
        :desc "revert"              "r"   #'revert-buffer-quick-no-confirm))
 
-;; window control keybindings
-;; (map! :map evil-window-map
-;;       "o" `delete-other-windows)
-
 ;; dired keybindings:
 (map! :leader
       (:prefix ("d" . "dired")
@@ -538,7 +559,7 @@
   (define-key dired-mode-map (kbd "M-j") `dirvish-fd-jump)
   (define-key dired-mode-map (kbd "TAB") `dirvish-toggle-subtree))
 
-; haskell repl(lol) mode
+                                        ; haskell repl(lol) mode
 ;; (evil-define-key 'normal haskell-mode-map
 ;;   (kbd "gk")     '("check info" . haskell-process-do-info)
 ;;   (kbd "SPC lc") '("load the repl" . haskell-process-load-file))
@@ -547,7 +568,7 @@
 ;;   (kbd "<up>")  `haskell-interactive-mode-history-previous
 ;;   (kbd "<down>")`haskell-interactive-mode-history-next)
 
-; idris repl(interactive) mode
+                                        ; idris repl(interactive) mode
 ;; (evil-define-key 'insert idris-repl-mode-map
 ;;   (kbd "C-l")   `idris-repl-clear-buffer
 ;;   (kbd "<up>")  `idris-repl-backward-history
@@ -580,7 +601,7 @@
 ;; (define-key evil-command-line-map
 ;;   (kbd "C-S-v")  '("paste" . evil-paste-after))
 
-; Alt+m key bindings
+                                        ; Alt+m key bindings
 (bind-keys
  :prefix "M-m"
  :prefix-map launchpad-keys
@@ -593,19 +614,47 @@
  ("e" . eval-defun)
  ("r" . revert-buffer-quick-no-confirm))
 
+(defun +my-dash-board-toggle-recent-file ()
+  "Toggle whether show the recent file or not, default to no."
+  (interactive)
+  (progn
+    (when (boundp '+doom-dashboard-functions)
+      (when (listp +doom-dashboard-functions)
+        (if (member 'custom-dashboard-widget-recent-file +doom-dashboard-functions)
+            ;; If custom-dashboard-widget-recent-file exists, remove both widgets
+            (setq +doom-dashboard-functions
+                  (remove 'custom-dashboard-widget-dash-seperator
+                          (remove 'custom-dashboard-widget-recent-file +doom-dashboard-functions)))
+          ;; If custom-dashboard-widget-recent-file does not exist, add both widgets
+          (let ((banner-pos (cl-position 'doom-dashboard-widget-banner +doom-dashboard-functions)))
+            (when banner-pos
+              (setq +doom-dashboard-functions
+                    (append (cl-subseq +doom-dashboard-functions 0 (1+ banner-pos))
+                            '(custom-dashboard-widget-dash-seperator custom-dashboard-widget-recent-file)
+                            (cl-subseq +doom-dashboard-functions (1+ banner-pos)))))))))
+    (+doom-dashboard/open (selected-frame))
+    ))
 
 (dotimes (i 5)
   (let ((arg (1+ i)))
     (defalias (intern (format "dashboard-open-recent-file-by-arg-%d" arg))
       (lambda () (interactive) (dashboard-open-recent-file-by-arg arg nil))
       (format "open recent file #%d" arg))))
+
+(dotimes (i 9)
+  (global-set-key (kbd (format "M-%d" (1+ i)))
+                  (lambda () (interactive)
+                    (funcall (intern (format "+workspace/switch-to-%d" i))))))
+
 (bind-keys
  :map +doom-dashboard-mode-map
-  ("1" . dashboard-open-recent-file-by-arg-1)
-  ("2" . dashboard-open-recent-file-by-arg-2)
-  ("3" . dashboard-open-recent-file-by-arg-3)
-  ("4" . dashboard-open-recent-file-by-arg-4)
-  ("5" . dashboard-open-recent-file-by-arg-5))
+ ("1" . dashboard-open-recent-file-by-arg-1)
+ ("2" . dashboard-open-recent-file-by-arg-2)
+ ("3" . dashboard-open-recent-file-by-arg-3)
+ ("4" . dashboard-open-recent-file-by-arg-4)
+ ("5" . dashboard-open-recent-file-by-arg-5)
+ ("r" . +my-dash-board-toggle-recent-file)
+ )
 
 
 ;; (evil-define-key `normal +doom-dashboard-mode-map

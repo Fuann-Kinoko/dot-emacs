@@ -1,4 +1,5 @@
 ;;; configs/init-mode.el -*- lexical-binding: t; -*-
+;;; Code:
 
 ;; adga / agda 2
 ;; (load-file (let ((coding-system-for-read 'utf-8))
@@ -8,9 +9,14 @@
 ;;      '(("\\.agda\\'" . agda2-mode)
 ;;        ("\\.lagda.md\\'" . agda2-mode))
 ;;      auto-mode-alist))
+(setopt lsp-clangd-binary-path "C:/Program Files/LLVM/bin/clangd.exe")
+(setopt lsp-clangd-version "20.1.0")
 
 ;; lisp for kmonad
 (add-to-list 'auto-mode-alist '("\\.kbd\\'" . lisp-mode))
+
+;; glsl mode for .frag / .vert
+(use-package! glsl-mode)
 
 ;; kdl mode (inherited from sdlang mode)
 ;; (add-to-list 'auto-mode-alist '("\\.kdl\\'" . sdlang-mode))

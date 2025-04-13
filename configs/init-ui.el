@@ -36,7 +36,7 @@
 
 ;; =========================== Doom Theme ==========================
 (setopt doom-gruvbox-material-background  "medium"  ; or hard (defaults to soft)
-     doom-gruvbox-material-palette     "material") ; or original (defaults to material)
+        doom-gruvbox-material-palette     "material") ; or original (defaults to material)
 (setopt doom-theme 'doom-gruvbox-material) ;; 'doom-tomorrow-day', 'doom-flatwhite', 'doom-earl-grey', 'my-mountain', 'doom-gruvbox-material'
 
 (setopt display-line-numbers-type 'relative) ;; `nil', `relative'
@@ -48,13 +48,14 @@
   (set-popup-rule! "^\\*rustic-compilation" :height 0.5))
 ;; make rust cargo run window takes half screen
 
-(after! ace-window
-  (setopt aw-char-position 'top-left)
-  (set-face-attribute 'aw-leading-char-face nil
-                      :height 1.5))
+(use-package! ace-window
+  :disabled t)
+;; (after! ace-window
+;;   (customize-set-variable aw-char-position 'top-left)
+;;   (set-face-attribute 'aw-leading-char-face nil
+;;                       :height 1.5))
 ;; change the size and the font of indicator triggered by ace-window(C-w C-w)
 
-(setopt lsp-signature-function 'lsp-signature-posframe)
 (setopt lsp-signature-doc-lines 10)
 ;; change lsp-signature to overlay, instead of jumping a bunch of stuff from bottom buffer
 ;; which is f***ing annoying
@@ -71,9 +72,9 @@
   (let ((theme doom-theme))
     (if (eq theme 'doom-flatwhite)
         (progn (setopt global-hl-line-modes nil)
-         (global-hl-line-mode -1))
-        (progn (setopt global-hl-line-modes '(prog-mode text-mode conf-mode special-mode org-agenda-mode dired-mode))
-         (global-hl-line-mode 1)))))
+               (global-hl-line-mode -1))
+      (progn (setopt global-hl-line-modes '(prog-mode text-mode conf-mode special-mode org-agenda-mode dired-mode))
+             (global-hl-line-mode 1)))))
 ;; (setq global-hl-line-modes nil)
 (add-hook 'after-init-hook 'adjust-global-hl-line-mode-based-on-theme)
 (add-hook 'doom-load-theme-hook 'adjust-global-hl-line-mode-based-on-theme)
@@ -81,12 +82,12 @@
 ;; so that i can use this theme correctly
 
 (modify-all-frames-parameters
-'((right-divider-width . 40)
-(internal-border-width . 46)))
+ '((right-divider-width . 40)
+   (internal-border-width . 46)))
 (dolist (face '(window-divider
                 window-divider-first-pixel
                 window-divider-last-pixel))
-(face-spec-reset-face face))
+  (face-spec-reset-face face))
 ;; add more blank in margin area, aesthentical setting
 
 (setopt pixel-scroll-precision-interpolate-page t)
@@ -105,9 +106,9 @@
 
 
 (setopt scroll-preserve-screen-position t
-      scroll-margin 0
-      ;; set conservatively to 1, to auto-recenter after c-i c-o jump
-      scroll-conservatively 1)
+        scroll-margin 0
+        ;; set conservatively to 1, to auto-recenter after c-i c-o jump
+        scroll-conservatively 1)
 (setopt display-line-numbers-width-start t)
 ;; let scroll slow down a little bit
 
@@ -134,5 +135,105 @@
 
 ;; let which-key jump out quicker
 (setopt which-key-idle-delay 0.5)
+
+;;@@IBUFFER 高级 buffer 列表
+(use-package ibuffer
+  :bind ("C-x C-b" . yy/ibuffer)
+  :config
+  (defun yy/ibuffer ()
+    (interactive)
+    (if (string= (buffer-name) "*Ibuffer*")
+        (ibuffer-update nil t)
+      (ibuffer)))
+  ;; 不显示临时 BUFFER
+  ;; 还是显示吧
+  ;;(setopt ibuffer-never-show-predicates '("^\\*"))
+  ;; 不显示为空的分组
+  (setopt ibuffer-show-empty-filter-groups nil)
+  ;; 不显示汇总信息
+  (setopt ibuffer-display-summary nil)
+  ;; 显式人类可读的文件大小（Emacs 31 开始支持）
+  (setopt ibuffer-human-readable-size t)
+  ;; 默认的 filter-group
+  (setopt ibuffer-saved-filter-groups
+          '(("default"
+             ("PROJECT"
+              (name . "\\*<p>.+\\*"))
+             ("emacs-src-el"
+              (and (file-extension . "el")
+                   (directory . "share/emacs/.*/lisp")))
+             ("emacs-lisp"
+              (or (file-extension . "el")
+                  (mode . emacs-lisp-mode)))
+             ("common-lisp"
+              (or (file-extension . "lisp")
+                  (mode . lisp-mode)))
+             ("scheme/racket"
+              (or (mode . scheme-mode)
+                  (file-extension . "scm")))
+             ("C/C++"
+              (or (mode . c-mode)
+                  (mode . c++-mode)
+                  (filename . ".+\\.\\(c\\|cc\\|cpp\\|h\\|hpp\\)$")))
+             ("Python"
+              (or (mode . python-mode)
+                  (mode . python-ts-mode)
+                  (file-extension . "py")))
+             ("js/css/html"
+              (or (mode . js-mode)
+                  (mode . js-ts-mode)
+                  (mode . json-ts-mode)
+                  (filename . ".+\\.\\(cjs\\|mjs\\|js\\|json\\|ts\\)")
+                  (mode . html-mode)
+                  (mode . css-mode)
+                  (filename . ".+\\.wgsl")
+                  (filename . ".+\\.html?")
+                  (filename . ".+\\.css")))
+             ("Rust"
+              (or (mode . rust-ts-mode)
+                  (file-extension . "rs")))
+             ("rescript"
+              (or (mode . rescript-mode)
+                  (filename . ".+\\.resi?")))
+             ("ORG"
+              (or (mode . org-mode)
+                  (file-extension . "org")))
+             ("DIRED"
+              (mode . dired-mode))
+             ("IMAGES"
+              (or (mode . image-mode)
+                  (filename . ".+\\.\\(jpe?g\\|png\\|gif\\|webp\\|ppm\\|pgm\\|pbm\\)")))
+             ("TEXT"
+              (or (mode . text-mode)
+                  (filename . ".+\\.txt")))
+             ("CONFIG"
+              (or (mode . conf-mode)
+                  (filename . ".+\\.toml")
+                  (filename . ".+\\.yaml")))
+             ("LOG"
+              (or (filename . "[cC][hH][aA][nN][gG][eE][lL][oO][gG]")
+                  (mode . change-log-mode)))
+	     ("SHELL"
+	      (mode . shell-mode))
+	     ("HELP"
+	      (or (mode . help-mode)
+		  (mode . Info-mode)
+		  (mode . apropos-mode)))
+	     ("MAGIT"
+	      (or (mode . magit-status-mode)
+		  (mode . magit-diff-mode)
+		  (mode . magit-log-mode)))
+             ("PROCESS"
+              (process))
+             ("TEMP"
+              (name . "\\*.*\\*")))))
+  (defun yy/ibuffer-use-default-group ()
+    (and (not ibuffer-filter-groups) ;; not use group
+         (assoc "default" ibuffer-saved-filter-groups)
+         (ibuffer-switch-to-saved-filter-groups "default")))
+  (add-hook 'ibuffer-hook 'yy/ibuffer-use-default-group))
+
+;; this is annoying and slow as fuck
+(turn-off-flyspell)
 
 (provide 'init-ui)

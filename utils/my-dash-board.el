@@ -103,11 +103,12 @@
       'face 'doom-dashboard-loaded)
      "\n")))
 
+;; recent-file will showup when `+my-dash-board-toggle-recent-file' is triggered, details in `init-keybinding.el'
+;; therefore, `custom-dashboard-widget-recent-file' is temproraily disabled
 (setopt +doom-dashboard-functions `(custom-dashboard-widget-space-seperator
                                   doom-dashboard-widget-banner
-                                  custom-dashboard-widget-dash-seperator
-                                  custom-dashboard-widget-recent-file
-                                  ;; doom-dashboard-widget-loaded
+                                  ;; custom-dashboard-widget-dash-seperator
+                                  ;; custom-dashboard-widget-recent-file
                                   my/doom-dashboard-widget-loaded))
 
 ;; (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
